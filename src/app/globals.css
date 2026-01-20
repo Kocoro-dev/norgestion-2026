@@ -1,0 +1,162 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-work-sans), 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
+
+  /* NORGESTION Colors */
+  --color-norgestion-primary: #016936;
+  --color-norgestion-dark: #11191C;
+  --color-norgestion-light: #EFF2F2;
+  --color-norgestion-text: #333333;
+  --color-norgestion-text-light: #666666;
+  --color-norgestion-text-muted: #888888;
+  --color-norgestion-border: #E5E5E5;
+  --color-norgestion-bg: #FFFFFF;
+  --color-norgestion-bg-alt: #F5F5F7;
+  --color-norgestion-link: #1E8DA6;
+}
+
+:root {
+  --radius: 0;
+  --background: #FFFFFF;
+  --foreground: #333333;
+  --card: #FFFFFF;
+  --card-foreground: #333333;
+  --popover: #FFFFFF;
+  --popover-foreground: #333333;
+  --primary: #016936;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F5F5F7;
+  --secondary-foreground: #11191C;
+  --muted: #F5F5F7;
+  --muted-foreground: #666666;
+  --accent: #EFF2F2;
+  --accent-foreground: #11191C;
+  --destructive: #dc2626;
+  --border: #E5E5E5;
+  --input: #E5E5E5;
+  --ring: #016936;
+  --chart-1: #016936;
+  --chart-2: #11191C;
+  --chart-3: #1E8DA6;
+  --chart-4: #666666;
+  --chart-5: #E5E5E5;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #333333;
+  --sidebar-primary: #016936;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F5F5F7;
+  --sidebar-accent-foreground: #11191C;
+  --sidebar-border: #E5E5E5;
+  --sidebar-ring: #016936;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  h1, h2, h3, h4, h5 {
+    @apply font-semibold tracking-tight;
+    color: #11191C;
+  }
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+    line-height: 1.1;
+  }
+  h2 {
+    @apply text-3xl md:text-4xl;
+    line-height: 1.2;
+  }
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+  h4 {
+    @apply text-lg;
+  }
+  p {
+    color: #666666;
+    line-height: 1.6;
+  }
+  strong {
+    @apply font-semibold;
+    color: #11191C;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .section-padding {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+  .container-custom {
+    @apply max-w-[1120px] mx-auto px-6;
+  }
+}
+
+/* PDF Generation Mode Styles */
+body.pdf-generating .pdf-hide {
+  display: none !important;
+}
+
+body.pdf-generating .pdf-show {
+  display: block !important;
+}
+
+body.pdf-generating .slider-nav-dots,
+body.pdf-generating .slider-progress {
+  display: none !important;
+}
+
+/* Ensure sections have proper backgrounds for PDF capture */
+body.pdf-generating [id^="pdf-section-"] {
+  page-break-inside: avoid;
+}
