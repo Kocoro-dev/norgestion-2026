@@ -45,7 +45,7 @@ export function MetricsSection({ label, title, description, metrics }: MetricsSe
                   )}
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[#11191C] mb-2">
+                  <h4 className="font-medium text-[#11191C] mb-2">
                     {metric.title}
                   </h4>
                   <p className="text-sm text-[#666666]">
@@ -57,7 +57,7 @@ export function MetricsSection({ label, title, description, metrics }: MetricsSe
           </div>
 
           <div className="bg-white p-8">
-            <h4 className="font-semibold text-[#11191C] mb-6">
+            <h4 className="font-medium text-[#11191C] mb-6">
               Origen del tráfico
             </h4>
             <div className="flex items-center justify-center h-[200px] mb-6">

@@ -117,7 +117,10 @@
     @apply text-xl md:text-2xl;
   }
   h4 {
-    @apply text-lg;
+    @apply text-lg font-medium;
+  }
+  h5 {
+    @apply font-medium;
   }
   p {
     color: #666666;
@@ -140,6 +143,24 @@
   .container-custom {
     @apply max-w-[1120px] mx-auto px-6;
   }
+}
+
+/* Custom scrollbar - always visible */
+.scrollbar-visible::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* PDF Generation Mode Styles */

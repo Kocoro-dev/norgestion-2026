@@ -96,7 +96,7 @@ export function PricingSection({
           <div className="space-y-6">
             {notes.map((note, index) => (
               <div key={index} className="bg-white border border-[#E5E5E5] p-6">
-                <h4 className="font-semibold text-[#11191C] mb-2">
+                <h4 className="font-medium text-[#11191C] mb-2">
                   {note.title}
                 </h4>
                 <p className="text-sm text-[#666666]">
