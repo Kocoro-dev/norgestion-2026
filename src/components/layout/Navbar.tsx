@@ -13,12 +13,19 @@ interface NavItem {
 
 interface NavbarProps {
   items: NavItem[]
+  darkSections?: string[]
 }
 
-export function Navbar({ items }: NavbarProps) {
+// Default dark sections based on typical layout
+const DEFAULT_DARK_SECTIONS = ['', 'liderazgo', 'competitivo']
+
+export function Navbar({ items, darkSections = DEFAULT_DARK_SECTIONS }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('')
   const pathname = usePathname()
+
+  // Determine if current section has dark background
+  const isDarkSection = darkSections.includes(activeSection)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,12 +59,12 @@ export function Navbar({ items }: NavbarProps) {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-[#d2d2d7] z-[1000]">
+    <nav className="fixed top-0 left-0 right-0 z-[1000] backdrop-blur-xl">
       <div className="max-w-[1176px] mx-auto px-6 flex items-center justify-between h-[68px]">
         {/* Logo */}
-        <Link href="/">
+        <Link href="/" className="transition-opacity duration-300 hover:opacity-70">
           <Image
-            src="/assets/images/Logo_NORGESTION-verde.png"
+            src={isDarkSection ? "/assets/images/Logo_NORGESTION-blanco_.png" : "/assets/images/Logo_NORGESTION-verde.png"}
             alt="NORGESTION"
             width={200}
             height={40}
@@ -74,10 +81,18 @@ export function Navbar({ items }: NavbarProps) {
               <Link
                 href={item.href}
                 className={cn(
-                  "text-[16px] font-normal transition-colors",
+                  "relative text-[16px] font-normal py-1 transition-all duration-300",
+                  "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[1.5px] after:transition-all after:duration-300 after:ease-out",
+                  isDarkSection
+                    ? "after:bg-[#2a9d5c]"
+                    : "after:bg-[#016936]",
                   isActive(item.href)
-                    ? "text-[#016936]"
-                    : "text-[#6e6e73] hover:text-[#1d1d1f]"
+                    ? isDarkSection
+                      ? "text-white after:w-full"
+                      : "text-[#1d1d1f] after:w-full"
+                    : isDarkSection
+                      ? "text-white/70 after:w-0 hover:text-white hover:after:w-full"
+                      : "text-[#1d1d1f]/70 after:w-0 hover:text-[#1d1d1f] hover:after:w-full"
                 )}
               >
                 {item.label}
@@ -93,11 +108,13 @@ export function Navbar({ items }: NavbarProps) {
           aria-label="Menú"
         >
           <span className={cn(
-            "w-5 h-[1.5px] bg-[#1d1d1f] transition-transform",
+            "w-5 h-[1.5px] transition-all duration-300",
+            isDarkSection ? "bg-white" : "bg-[#1d1d1f]",
             menuOpen && "rotate-45 translate-y-[3px]"
           )} />
           <span className={cn(
-            "w-5 h-[1.5px] bg-[#1d1d1f] transition-transform",
+            "w-5 h-[1.5px] transition-all duration-300",
+            isDarkSection ? "bg-white" : "bg-[#1d1d1f]",
             menuOpen && "-rotate-45 -translate-y-[3px]"
           )} />
         </button>
@@ -105,7 +122,8 @@ export function Navbar({ items }: NavbarProps) {
 
       {/* Mobile Menu */}
       <div className={cn(
-        "md:hidden fixed top-[68px] left-0 right-0 bg-white border-b border-[#d2d2d7] transition-all",
+        "md:hidden fixed top-[68px] left-0 right-0 backdrop-blur-xl transition-all duration-300",
+        isDarkSection ? "bg-black/20" : "bg-white/20",
         menuOpen ? "opacity-100 visible" : "opacity-0 invisible -translate-y-full"
       )}>
         <ul className="p-6 space-y-4">
@@ -114,10 +132,18 @@ export function Navbar({ items }: NavbarProps) {
               <Link
                 href={item.href}
                 className={cn(
-                  "text-[16px] font-normal",
+                  "relative text-[16px] font-normal inline-block",
+                  "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[1.5px] after:transition-all after:duration-300",
+                  isDarkSection
+                    ? "after:bg-[#2a9d5c]"
+                    : "after:bg-[#016936]",
                   isActive(item.href)
-                    ? "text-[#016936]"
-                    : "text-[#6e6e73]"
+                    ? isDarkSection
+                      ? "text-white after:w-full"
+                      : "text-[#1d1d1f] after:w-full"
+                    : isDarkSection
+                      ? "text-white/70 after:w-0"
+                      : "text-[#1d1d1f]/70 after:w-0"
                 )}
                 onClick={() => setMenuOpen(false)}
               >

@@ -80,7 +80,7 @@ export const pageRankingInsights: Insight[] = [
   },
   {
     title: 'Jerarquía de interés',
-    description: 'Las áreas de <strong>Corporate Finance</strong> y <strong>Nuestra Firma</strong> lideran el interés tras la Home. Les siguen Jurídico Fiscal e Interim Management y la página de M&A, validando el cross-selling de servicios.',
+    description: 'El área corporativa y <strong>Nuestra Firma</strong> lideran el interés, seguidos de Jurídico-Fiscal y M&A, reflejando un interés transversal en los diferentes servicios de la firma.',
   },
   {
     title: 'Marca personal y liderazgo',
@@ -92,7 +92,7 @@ export const pageRankingInsights: Insight[] = [
 export const visibilityRankingInsights: Insight[] = [
   {
     title: 'Hegemonía en Corporate Finance',
-    description: 'Aunque Interim Management lidera individualmente, las verticales de <strong>Corporate Finance</strong> y <strong>M&A</strong> combinadas dominan el volumen total de impresiones. El mercado identifica claramente a la firma con operaciones corporativas.',
+    description: 'Aunque Interim Management lidera individualmente, las verticales de <strong>Corporate Finance</strong> y <strong>M&A</strong> sumadas dominan el volumen total. El mercado identifica claramente a la firma con operaciones corporativas.',
   },
   {
     title: 'Servicios especializados vs. Home',

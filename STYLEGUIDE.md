@@ -137,8 +137,8 @@ Primary:
 ```
 Contenedor:
 - borde: border border-white/[0.06]
-- max-height: max-h-[400px]
-- overflow: overflow-y-auto
+- max-height: max-h-[400px] o max-h-[500px]
+- overflow: overflow-y-scroll scrollbar-visible
 
 Header:
 - fondo: bg-[#11191C]
@@ -150,6 +150,30 @@ Filas:
 - hover: hover:bg-[#016936]/[0.12]
 - cursor: cursor-pointer (si es clicable)
 - padding celdas: py-4, primera celda pl-6
+```
+
+### Scrollbar personalizado (secciones oscuras)
+```
+Clase: scrollbar-visible
+Uso: Añadir a contenedores con overflow en secciones de fondo oscuro
+
+IMPORTANTE: Los estilos deben estar dentro de @layer components en globals.css
+para que funcionen correctamente en desarrollo (Tailwind CSS 4)
+
+CSS (definido en globals.css):
+- width: 8px
+- track: rgba(255, 255, 255, 0.06)
+- thumb: rgba(255, 255, 255, 0.2)
+- thumb hover: rgba(255, 255, 255, 0.3)
+- border-radius: 4px
+
+Aplicar a:
+- Tablas con scroll vertical
+- Listas largas en secciones oscuras
+- Cualquier contenedor scrollable en bg-[#11191C]
+
+IMPORTANTE: Añadir data-lenis-prevent para evitar conflictos con Lenis:
+<div className="overflow-y-scroll scrollbar-visible" data-lenis-prevent>
 ```
 
 ---
@@ -207,14 +231,69 @@ Filas:
 
 ## Animaciones
 
+### Librerías
+- **Lenis**: Smooth scroll global (configurado en `/lib/smooth-scroll.tsx`)
+- **GSAP + ScrollTrigger**: Animaciones de entrada (configurado en `/lib/animations.tsx`)
+
+### Configuración Lenis
+```typescript
+duration: 1.2
+easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+smoothWheel: true
+touchMultiplier: 2
+```
+
+### Parámetros GSAP estándar
+```
+Ease: power2.out (Apple-style, suave)
+Duración: 0.7-0.9s para elementos, 0.6s para stagger
+Distancia: y: 25-40px (vertical)
+Start trigger: top 85% (cuando 15% del elemento es visible)
+Stagger: 0.08-0.15s entre elementos
+```
+
+### Patrones de animación
+
+**Headers de sección:**
+```typescript
+gsap.set(elements, { opacity: 0, y: 30 })
+gsap.to(elements, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12 })
+```
+
+**Cards y grids:**
+```typescript
+gsap.set(cards, { opacity: 0, y: 35 })
+gsap.to(cards, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 })
+```
+
+**Contadores animados:**
+```typescript
+gsap.fromTo(counter, { textContent: 0 }, {
+  textContent: endValue,
+  duration: 1.5,
+  snap: { textContent: 1 }
+})
+```
+
+**Barras de progreso:**
+```typescript
+gsap.fromTo(bar, { width: '0%' }, {
+  width: `${percentage}%`,
+  duration: 0.8,
+  delay: index * 0.05
+})
+```
+
+### Principios
+- Animaciones sutiles tipo Apple - no deben ser protagonistas
+- Solo animar al entrar en viewport (once: true)
+- Mantener hovers CSS para feedback inmediato
+- Evitar animaciones en móvil para performance
+
 ### Toast (Sonner)
 - Posición: esquina inferior
 - Duración: 3 segundos
 - Tipo: success para confirmaciones de copiado
-
-### Transiciones de página
-- Elementos con fade-in suave donde aplique
-- No usar animaciones excesivas - mantener sobriedad
 
 ---
 

@@ -343,7 +343,7 @@ export async function generateEditorialPDF(
 
   addText('Presencia en IA generativa', 'h2')
   addSpacer(5)
-  addText('NORGESTION aparece de forma destacada en los resultados de inteligencia artificial generativa (ChatGPT, Perplexity, Claude), tanto en búsquedas transaccionales como en consultas específicas sobre asesores boutique y especialistas en middle market.', 'body', 6)
+  addText('NORGESTION aparece de forma destacada en los resultados de inteligencia artificial generativa (ChatGPT, Perplexity, Claude y Gemini), tanto en búsquedas transaccionales como en consultas específicas sobre asesores boutique y especialistas en middle market.', 'body', 6)
 
   onProgress?.(70)
 

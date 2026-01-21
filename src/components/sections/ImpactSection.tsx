@@ -1,156 +1,11 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Animated Counter
-function AnimatedCounter({
-  value,
-  duration = 2000,
-}: {
-  value: number
-  duration?: number
-}) {
-  const [displayValue, setDisplayValue] = useState(0)
-  const ref = useRef<HTMLSpanElement>(null)
-  const hasAnimated = useRef(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !hasAnimated.current) {
-          hasAnimated.current = true
-          const startTime = performance.now()
-
-          const animate = (currentTime: number) => {
-            const elapsed = currentTime - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            const easeOut = 1 - Math.pow(1 - progress, 4)
-            setDisplayValue(Math.floor(value * easeOut))
-
-            if (progress < 1) {
-              requestAnimationFrame(animate)
-            } else {
-              setDisplayValue(value)
-            }
-          }
-
-          requestAnimationFrame(animate)
-        }
-      },
-      { threshold: 0.3 }
-    )
-
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [value, duration])
-
-  return <span ref={ref}>{displayValue}</span>
-}
-
-// Contact Category Card
-function CategoryCard({
-  value,
-  descriptor,
-  subtext,
-  isHighlighted = false,
-  delay = 0,
-}: {
-  value: number
-  descriptor: string
-  subtext: string
-  isHighlighted?: boolean
-  delay?: number
-}) {
-  const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay)
-        }
-      },
-      { threshold: 0.3 }
-    )
-
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [delay])
-
-  return (
-    <div
-      ref={ref}
-      className={`relative transition-all duration-700 ease-out ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-      }`}
-    >
-      {/* The number */}
-      <div className={`mb-4 ${isHighlighted ? 'text-[#016936]' : 'text-[#1d1d1f]'}`}>
-        <span className={`text-[72px] md:text-[96px] font-extralight leading-none tracking-tight tabular-nums ${
-          isHighlighted ? 'font-light' : ''
-        }`}>
-          <AnimatedCounter value={value} />
-        </span>
-      </div>
-
-      {/* Descriptor */}
-      <div className={`text-[15px] font-medium mb-1 ${
-        isHighlighted ? 'text-[#016936]' : 'text-[#1d1d1f]'
-      }`}>
-        {descriptor}
-      </div>
-
-      {/* Subtext */}
-      <div className="text-[13px] text-[#86868b]">
-        {subtext}
-      </div>
-    </div>
-  )
-}
-
-// Insight Item
-function InsightItem({
-  title,
-  description,
-  delay = 0,
-}: {
-  title: string
-  description: string
-  delay?: number
-}) {
-  const [isVisible, setIsVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setTimeout(() => setIsVisible(true), delay)
-        }
-      },
-      { threshold: 0.3 }
-    )
-
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [delay])
-
-  return (
-    <div
-      ref={ref}
-      className={`transition-all duration-500 ease-out ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-      }`}
-    >
-      <h4 className="text-[15px] font-medium text-[#1d1d1f] mb-2">
-        {title}
-      </h4>
-      <p className="text-[15px] text-[#6e6e73] leading-relaxed">
-        {description}
-      </p>
-    </div>
-  )
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
 }
 
 interface ImpactSectionProps {
@@ -166,12 +21,119 @@ export function ImpactSection({
   subtitle,
   disclaimer,
 }: ImpactSectionProps) {
+  const sectionRef = useRef<HTMLElement>(null)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const categoriesRef = useRef<HTMLDivElement>(null)
+  const insightsRef = useRef<HTMLDivElement>(null)
+  const counterRefs = useRef<(HTMLSpanElement | null)[]>([])
+
+  const categories = [
+    { value: 61, descriptor: 'Contactos de Negocio', subtext: 'M&A, Inversores, Consultas Servicios', isHighlighted: true },
+    { value: 50, descriptor: 'Captación de Talento', subtext: 'Candidatos de empleo y prácticas', isHighlighted: false },
+    { value: 18, descriptor: 'Interim Pool', subtext: 'Solicitudes de adhesión al equipo', isHighlighted: false },
+  ]
+
+  const insights = [
+    { title: 'Cualificación del flujo', description: 'En 2025 se ha aumentado significativamente el volumen de consultas con intención comercial, asemejándose ya al volumen de captación de talento, lo que valida la web como herramienta de soporte a la originación.' },
+    { title: 'Tracción vertical', description: 'Validación de especialización. La vertical de M&A Software ha generado contactos específicos del sector, demostrando que el contenido de nicho atrae a una contraparte cualificada.' },
+    { title: 'Alcance cross-border', description: 'Originación Internacional. Se registran entradas de contacto procedentes de mercados exteriores, correlacionando con el aumento de tráfico internacional observado en la analítica web.' },
+  ]
+
+  useEffect(() => {
+    const header = headerRef.current
+    const categoriesContainer = categoriesRef.current
+    const insightsContainer = insightsRef.current
+
+    // Header animation
+    if (header) {
+      const elements = header.querySelectorAll(':scope > *')
+      gsap.set(elements, { opacity: 0, y: 30 })
+
+      ScrollTrigger.create({
+        trigger: header,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(elements, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: 'power2.out',
+          })
+        },
+        once: true,
+      })
+    }
+
+    // Categories animation with counter
+    if (categoriesContainer) {
+      const cards = categoriesContainer.querySelectorAll('.category-card')
+      gsap.set(cards, { opacity: 0, y: 40 })
+
+      ScrollTrigger.create({
+        trigger: categoriesContainer,
+        start: 'top 80%',
+        onEnter: () => {
+          gsap.to(cards, {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            stagger: 0.15,
+            ease: 'power2.out',
+          })
+
+          // Animate counters
+          counterRefs.current.forEach((counter, index) => {
+            if (counter) {
+              const endValue = categories[index].value
+              gsap.fromTo(counter,
+                { textContent: 0 },
+                {
+                  textContent: endValue,
+                  duration: 1.5,
+                  delay: 0.3 + (index * 0.15),
+                  ease: 'power2.out',
+                  snap: { textContent: 1 },
+                  onUpdate: function() {
+                    counter.textContent = Math.round(parseFloat(counter.textContent || '0')).toString()
+                  },
+                }
+              )
+            }
+          })
+        },
+        once: true,
+      })
+    }
+
+    // Insights animation
+    if (insightsContainer) {
+      const items = insightsContainer.querySelectorAll('.insight-item')
+      gsap.set(items, { opacity: 0, y: 25 })
+
+      ScrollTrigger.create({
+        trigger: insightsContainer,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(items, {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: 'power2.out',
+          })
+        },
+        once: true,
+      })
+    }
+  }, [])
+
   return (
-    <section id="impacto" className="py-24 md:py-32 bg-white">
+    <section ref={sectionRef} id="impacto" className="py-24 md:py-32 bg-white">
       <div className="max-w-[1176px] mx-auto px-6">
 
-        {/* Header - Minimal */}
-        <div className="mb-20 md:mb-24">
+        {/* Header */}
+        <div ref={headerRef} className="mb-20 md:mb-24">
           <div className="text-[13px] font-medium uppercase tracking-[0.2em] text-[#016936] mb-5">
             {label}
           </div>
@@ -183,54 +145,47 @@ export function ImpactSection({
           </p>
         </div>
 
-        {/* Block A: The Mix - Contact Breakdown */}
-        <div className="mb-20 md:mb-28">
+        {/* Categories */}
+        <div ref={categoriesRef} className="mb-20 md:mb-28">
           <div className="grid md:grid-cols-3 gap-12 md:gap-16">
-            {/* Category 1: Commercial - Highlighted */}
-            <CategoryCard
-              value={61}
-              descriptor="Contactos de Negocio"
-              subtext="M&A, Inversores, Consultas Servicios"
-              isHighlighted={true}
-              delay={0}
-            />
-
-            {/* Category 2: Talent */}
-            <CategoryCard
-              value={50}
-              descriptor="Captación de Talento"
-              subtext="Candidatos de empleo y prácticas"
-              delay={150}
-            />
-
-            {/* Category 3: Senior Talent */}
-            <CategoryCard
-              value={18}
-              descriptor="Interim Pool"
-              subtext="Solicitudes de adhesión al equipo"
-              delay={300}
-            />
+            {categories.map((cat, index) => (
+              <div key={index} className="category-card">
+                <div className={`mb-4 ${cat.isHighlighted ? 'text-[#016936]' : 'text-[#1d1d1f]'}`}>
+                  <span
+                    ref={el => { counterRefs.current[index] = el }}
+                    className={`text-[72px] md:text-[96px] font-extralight leading-none tracking-tight tabular-nums ${
+                      cat.isHighlighted ? 'font-light' : ''
+                    }`}
+                  >
+                    0
+                  </span>
+                </div>
+                <div className={`text-[15px] font-medium mb-1 ${
+                  cat.isHighlighted ? 'text-[#016936]' : 'text-[#1d1d1f]'
+                }`}>
+                  {cat.descriptor}
+                </div>
+                <div className="text-[13px] text-[#86868b]">
+                  {cat.subtext}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Block B: Qualitative Analysis - Insights */}
-        <div className="pt-12 border-t border-[#d2d2d7]/60">
+        {/* Insights */}
+        <div ref={insightsRef} className="pt-12 border-t border-[#d2d2d7]/60">
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-            <InsightItem
-              title="Cambio de tendencia"
-              description="Inversión de la polaridad del tráfico. Por primera vez, el volumen de consultas con intención comercial supera al flujo de candidatos y talento, validando la web como herramienta de soporte a la originación."
-              delay={0}
-            />
-            <InsightItem
-              title="Tracción vertical"
-              description="Validación de especialización. La vertical de M&A Software ha generado contactos específicos del sector, demostrando que el contenido de nicho atrae a una contraparte cualificada."
-              delay={100}
-            />
-            <InsightItem
-              title="Alcance cross-border"
-              description="Originación Internacional. Se registran entradas de contacto procedentes de mercados exteriores, correlacionando con el aumento de tráfico internacional observado en la analítica web."
-              delay={200}
-            />
+            {insights.map((insight, index) => (
+              <div key={index} className="insight-item">
+                <h4 className="text-[15px] font-medium text-[#1d1d1f] mb-2">
+                  {insight.title}
+                </h4>
+                <p className="text-[15px] text-[#6e6e73] leading-relaxed">
+                  {insight.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
 

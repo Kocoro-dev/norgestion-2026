@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { Work_Sans } from "next/font/google"
 import { Toaster } from "@/components/ui/sonner"
+import { SmoothScrollProvider } from "@/lib/smooth-scroll"
+import { AnimationProvider } from "@/lib/animations"
 import "./globals.css"
 
 const workSans = Work_Sans({
@@ -24,7 +26,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${workSans.variable} font-sans antialiased`}>
-        {children}
+        <SmoothScrollProvider>
+          <AnimationProvider>
+            {children}
+          </AnimationProvider>
+        </SmoothScrollProvider>
         <Toaster />
       </body>
     </html>

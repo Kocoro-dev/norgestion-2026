@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { toast } from 'sonner'
 import Image from 'next/image'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
   Table,
   TableBody,
@@ -11,6 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 interface Stat {
   value: string
@@ -432,11 +438,104 @@ export function LeadershipSection({
   allKeywords,
   disclaimer,
 }: LeadershipSectionProps) {
+  const headerRef = useRef<HTMLDivElement>(null)
+  const statsRef = useRef<HTMLDivElement>(null)
+  const aiSectionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const header = headerRef.current
+    const statsContainer = statsRef.current
+    const aiSection = aiSectionRef.current
+
+    // Header animation
+    if (header) {
+      const elements = header.querySelectorAll(':scope > *')
+      gsap.set(elements, { opacity: 0, y: 25 })
+
+      ScrollTrigger.create({
+        trigger: header,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(elements, {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: 'power2.out',
+          })
+        },
+        once: true,
+      })
+    }
+
+    // Stats animation
+    if (statsContainer) {
+      const statItems = statsContainer.querySelectorAll('.stat-item')
+      gsap.set(statItems, { opacity: 0, y: 30 })
+
+      ScrollTrigger.create({
+        trigger: statsContainer,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(statItems, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: 'power2.out',
+          })
+        },
+        once: true,
+      })
+    }
+
+    // AI Section animation
+    if (aiSection) {
+      gsap.set(aiSection, { opacity: 0, y: 40 })
+
+      ScrollTrigger.create({
+        trigger: aiSection,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(aiSection, {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: 'power2.out',
+          })
+        },
+        once: true,
+      })
+    }
+
+    // Keyword grids animation
+    const keywordGrids = document.querySelectorAll('.keyword-grid')
+    keywordGrids.forEach((grid) => {
+      const cards = grid.querySelectorAll(':scope > *')
+      gsap.set(cards, { opacity: 0, y: 20 })
+
+      ScrollTrigger.create({
+        trigger: grid,
+        start: 'top 88%',
+        onEnter: () => {
+          gsap.to(cards, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.04,
+            ease: 'power2.out',
+          })
+        },
+        once: true,
+      })
+    })
+  }, [])
+
   return (
     <section id="liderazgo" className="py-16 md:py-24 bg-[#11191C]">
       <div className="max-w-[1176px] mx-auto px-6">
         {/* Header */}
-        <div className="mb-12">
+        <div ref={headerRef} className="mb-12">
           <div className="text-[14px] font-medium uppercase tracking-[0.15em] text-[#86868b] mb-4">
             {label}
           </div>
@@ -449,11 +548,11 @@ export function LeadershipSection({
         </div>
 
         {/* Main Stats */}
-        <div className="flex flex-col md:flex-row mb-24 pb-20 border-b border-white/[0.08]">
+        <div ref={statsRef} className="flex flex-col md:flex-row mb-24 pb-20 border-b border-white/[0.08]">
           {stats.map((stat, index) => (
             <div
               key={index}
-              className={`flex-1 py-6 md:py-0 ${index > 0 ? 'border-t md:border-t-0 md:border-l border-white/10 md:pl-12' : ''}`}
+              className={`stat-item flex-1 py-6 md:py-0 ${index > 0 ? 'border-t md:border-t-0 md:border-l border-white/10 md:pl-12' : ''}`}
             >
               <div className="text-[48px] md:text-[64px] font-extralight text-white leading-none mb-2">
                 {stat.value}
@@ -473,7 +572,7 @@ export function LeadershipSection({
           <p className="text-[16px] text-white/50 mb-10">
             Términos de alto valor comercial donde NORGESTION ocupa la primera posición.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/[0.06]">
+          <div className="keyword-grid grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/[0.06]">
             {generalKeywords.map((keyword, index) => (
               <KeywordCard key={index} term={keyword.term} position={keyword.position} />
             ))}
@@ -488,7 +587,7 @@ export function LeadershipSection({
           <p className="text-[16px] text-white/50 mb-10">
             Posicionamiento especializado en M&A del sector IT y software.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/[0.06]">
+          <div className="keyword-grid grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/[0.06]">
             {techKeywords.map((keyword, index) => (
               <KeywordCard key={index} term={keyword.term} position={keyword.position} />
             ))}
@@ -503,7 +602,7 @@ export function LeadershipSection({
           <p className="text-[16px] text-white/50 mb-10">
             Liderazgo en búsquedas locales de las principales ciudades.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/[0.06]">
+          <div className="keyword-grid grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/[0.06]">
             {geoKeywords.map((geo, index) => (
               <div key={index} className="p-6 bg-[#11191C] flex flex-col items-start">
                 <h4 className="font-medium text-white mb-5 text-[16px]">{geo.city}</h4>
@@ -525,7 +624,7 @@ export function LeadershipSection({
           <p className="text-[16px] text-white/50 mb-10">
             Visibilidad en búsquedas en inglés para captar operaciones cross-border.
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-[1px] bg-white/[0.06]">
+          <div className="keyword-grid grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-[1px] bg-white/[0.06]">
             {internationalKeywords.map((keyword, index) => (
               <KeywordCard key={index} term={keyword.term} position={keyword.position} />
             ))}
@@ -540,7 +639,7 @@ export function LeadershipSection({
           <p className="text-[16px] text-white/50 mb-10">
             Listado completo de términos donde NORGESTION aparece entre los 5 primeros resultados de Google.
           </p>
-          <div className="border border-white/[0.06] max-h-[500px] overflow-y-auto">
+          <div className="border border-white/[0.06] max-h-[500px] overflow-y-scroll scrollbar-visible" data-lenis-prevent>
             <Table>
               <TableHeader className="sticky top-0 bg-[#11191C] z-10">
                 <TableRow className="border-white/[0.06] hover:bg-transparent">
@@ -581,7 +680,7 @@ export function LeadershipSection({
         )}
 
         {/* AI Presence Section */}
-        <div className="mb-12 pt-16">
+        <div ref={aiSectionRef} className="mb-12 pt-16">
           <div className="grid lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-16 items-start">
             {/* Left Column - Text */}
             <div>
@@ -600,7 +699,7 @@ export function LeadershipSection({
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#016936] mt-2 flex-shrink-0" />
-                  <span className="text-[15px] text-white/50">Resultados en ChatGPT, Perplexity y Claude</span>
+                  <span className="text-[15px] text-white/50">Resultados en ChatGPT, Perplexity, Claude y Gemini</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#016936] mt-2 flex-shrink-0" />

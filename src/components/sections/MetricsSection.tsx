@@ -1,5 +1,13 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
+
 interface Metric {
   value: string
   unit?: string
@@ -15,10 +23,102 @@ interface MetricsSectionProps {
 }
 
 export function MetricsSection({ label, title, description, metrics }: MetricsSectionProps) {
+  const sectionRef = useRef<HTMLElement>(null)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const metricsRef = useRef<HTMLDivElement>(null)
+  const chartRef = useRef<HTMLDivElement>(null)
+  const circleRef = useRef<SVGCircleElement>(null)
+
+  useEffect(() => {
+    const section = sectionRef.current
+    const header = headerRef.current
+    const metricsContainer = metricsRef.current
+    const chart = chartRef.current
+    const circle = circleRef.current
+
+    if (!section) return
+
+    // Header animation
+    if (header) {
+      const elements = header.querySelectorAll(':scope > *')
+      gsap.set(elements, { opacity: 0, y: 25 })
+
+      ScrollTrigger.create({
+        trigger: header,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(elements, {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            stagger: 0.1,
+            ease: 'power2.out',
+          })
+        },
+        once: true,
+      })
+    }
+
+    // Metrics cards animation
+    if (metricsContainer) {
+      const cards = metricsContainer.querySelectorAll(':scope > *')
+      gsap.set(cards, { opacity: 0, y: 30 })
+
+      ScrollTrigger.create({
+        trigger: metricsContainer,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(cards, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: 'power2.out',
+          })
+        },
+        once: true,
+      })
+    }
+
+    // Chart animation
+    if (chart) {
+      gsap.set(chart, { opacity: 0, y: 30 })
+
+      ScrollTrigger.create({
+        trigger: chart,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(chart, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: 0.2,
+            ease: 'power2.out',
+          })
+
+          // Animate circle
+          if (circle) {
+            const circumference = 2 * Math.PI * 40
+            gsap.fromTo(circle,
+              { strokeDasharray: `0 ${circumference}` },
+              {
+                strokeDasharray: `${65 * 2.51} ${100 * 2.51}`,
+                duration: 1.2,
+                delay: 0.5,
+                ease: 'power2.out',
+              }
+            )
+          }
+        },
+        once: true,
+      })
+    }
+  }, [])
+
   return (
-    <section id="metricas" className="py-20 md:py-28 bg-[#F5F5F7]">
+    <section ref={sectionRef} id="metricas" className="py-20 md:py-28 bg-[#F5F5F7]">
       <div className="max-w-[1120px] mx-auto px-6">
-        <div className="mb-12">
+        <div ref={headerRef} className="mb-12">
           <span className="text-xs font-semibold uppercase tracking-wider text-[#016936] mb-3 block">
             {label}
           </span>
@@ -31,7 +131,7 @@ export function MetricsSection({ label, title, description, metrics }: MetricsSe
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
-          <div className="space-y-6">
+          <div ref={metricsRef} className="space-y-6">
             {metrics.map((metric, index) => (
               <div key={index} className="bg-white p-6 flex gap-6 items-start">
                 <div className="flex-shrink-0 text-right min-w-[100px]">
@@ -56,12 +156,11 @@ export function MetricsSection({ label, title, description, metrics }: MetricsSe
             ))}
           </div>
 
-          <div className="bg-white p-8">
+          <div ref={chartRef} className="bg-white p-8">
             <h4 className="font-medium text-[#11191C] mb-6">
               Origen del tráfico
             </h4>
             <div className="flex items-center justify-center h-[200px] mb-6">
-              {/* Simple visual representation */}
               <div className="relative w-48 h-48">
                 <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                   <circle
@@ -73,13 +172,14 @@ export function MetricsSection({ label, title, description, metrics }: MetricsSe
                     strokeWidth="20"
                   />
                   <circle
+                    ref={circleRef}
                     cx="50"
                     cy="50"
                     r="40"
                     fill="none"
                     stroke="#016936"
                     strokeWidth="20"
-                    strokeDasharray={`${65 * 2.51} ${100 * 2.51}`}
+                    strokeDasharray={`0 ${100 * 2.51}`}
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
