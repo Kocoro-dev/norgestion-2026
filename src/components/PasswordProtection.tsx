@@ -140,7 +140,7 @@ export function PasswordProtection({
 
         {/* Footer hint */}
         <p className="mt-6 text-center text-white/30 text-sm">
-          Si no tienes la contraseña, contacta con tu representante
+          Documento confidencial elaborado por kingseo.
         </p>
       </div>
     </div>
