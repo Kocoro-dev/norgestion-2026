@@ -122,8 +122,8 @@ export function Navbar({ items, darkSections = DEFAULT_DARK_SECTIONS }: NavbarPr
 
       {/* Mobile Menu */}
       <div className={cn(
-        "md:hidden fixed top-[68px] left-0 right-0 backdrop-blur-xl transition-all duration-300",
-        isDarkSection ? "bg-black/20" : "bg-white/20",
+        "md:hidden fixed top-[68px] left-0 right-0 transition-all duration-300",
+        isDarkSection ? "bg-[#0a0a0a]" : "bg-white",
         menuOpen ? "opacity-100 visible" : "opacity-0 invisible -translate-y-full"
       )}>
         <ul className="p-6 space-y-4">

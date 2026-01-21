@@ -16,6 +16,8 @@ interface CTASectionProps {
   pdfFilename?: string
   pdfTextFilename?: string
   pdfType?: 'informe' | 'propuesta'
+  centered?: boolean
+  showSeparator?: boolean
 }
 
 export function CTASection({
@@ -29,6 +31,8 @@ export function CTASection({
   pdfFilename = 'NORGESTION-Informe-2025.pdf',
   pdfTextFilename = 'NORGESTION-Informe-Texto-2025.pdf',
   pdfType = 'informe',
+  centered = false,
+  showSeparator = false,
 }: CTASectionProps) {
   const [isGeneratingVisual, setIsGeneratingVisual] = useState(false)
   const [isGeneratingText, setIsGeneratingText] = useState(false)
@@ -83,11 +87,15 @@ export function CTASection({
   return (
     <section className={cn(
       "py-20 md:py-28",
-      variant === 'dark' ? "bg-[#1d1d1f]" : "bg-white"
+      variant === 'dark' ? "bg-[#0a0a0a]" : "bg-[#fafafa]",
+      showSeparator && (variant === 'dark' ? "border-t border-white/10" : "border-t border-[#e5e5e5]")
     )}>
-      <div className="max-w-[1176px] mx-auto px-6 text-center">
+      <div className={cn(
+        "max-w-[1176px] mx-auto px-6",
+        centered && "text-center"
+      )}>
         <h2 className={cn(
-          "text-[32px] md:text-[48px] font-semibold leading-tight mb-4",
+          "text-[32px] md:text-[40px] lg:text-[48px] font-semibold leading-[1.1] tracking-[-0.02em] mb-4",
           variant === 'dark' ? "text-white" : "text-[#1d1d1f]"
         )}>
           {title}
@@ -95,8 +103,9 @@ export function CTASection({
 
         {description && (
           <p className={cn(
-            "text-[20px] mb-8 max-w-[500px] mx-auto",
-            variant === 'dark' ? "text-white/50" : "text-[#6e6e73]"
+            "text-[17px] md:text-[19px] mb-8 leading-[1.5]",
+            centered ? "max-w-[520px] mx-auto" : "max-w-[480px]",
+            variant === 'dark' ? "text-white/50" : "text-[#86868b]"
           )}>
             {description}
           </p>
@@ -105,21 +114,24 @@ export function CTASection({
         {mode === 'link' ? (
           <Link
             href={buttonHref}
-            className="inline-block bg-[#016936] text-white px-8 py-3 text-[15px] font-medium tracking-wide hover:bg-[#015a2d] transition-colors"
+            className="inline-block bg-[#016936] text-white px-10 py-4 text-[16px] font-medium rounded-none hover:bg-[#015a2d] transition-all duration-300 hover:shadow-[0_8px_24px_rgba(1,105,54,0.3)] hover:scale-[1.02]"
           >
             {buttonText}
           </Link>
         ) : (
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className={cn(
+            "flex flex-col sm:flex-row gap-4",
+            centered ? "items-center justify-center" : "items-start"
+          )}>
             {/* Primary Button - Visual PDF */}
             <button
               onClick={handleVisualPDF}
               disabled={isGeneratingVisual || isGeneratingText}
               className={cn(
-                "inline-flex items-center gap-3 bg-[#016936] text-white px-8 py-3 text-[15px] font-medium tracking-wide transition-all",
+                "inline-flex items-center gap-3 bg-[#016936] text-white px-10 py-4 text-[16px] font-medium rounded-none transition-all duration-300",
                 (isGeneratingVisual || isGeneratingText)
                   ? "opacity-80 cursor-wait"
-                  : "hover:bg-[#015a2d]"
+                  : "hover:bg-[#015a2d] hover:shadow-[0_8px_24px_rgba(1,105,54,0.3)] hover:scale-[1.02]"
               )}
             >
               {isGeneratingVisual ? (
@@ -157,10 +169,10 @@ export function CTASection({
               onClick={handleTextPDF}
               disabled={isGeneratingVisual || isGeneratingText}
               className={cn(
-                "inline-flex items-center gap-3 border-2 border-[#016936] text-[#016936] px-8 py-[10px] text-[15px] font-medium tracking-wide transition-all",
+                "inline-flex items-center gap-3 border-2 border-[#016936] text-[#016936] px-10 py-[14px] text-[16px] font-medium rounded-none transition-all duration-300",
                 (isGeneratingVisual || isGeneratingText)
                   ? "opacity-60 cursor-wait"
-                  : "hover:bg-[#016936]/5"
+                  : "hover:bg-[#016936]/5 hover:scale-[1.02]"
               )}
             >
               {isGeneratingText ? (

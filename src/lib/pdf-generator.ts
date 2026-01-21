@@ -70,6 +70,13 @@ export async function generateVisualPDF(
           progressBars.forEach((bar) => {
             ;(bar as HTMLElement).style.display = 'none'
           })
+
+          // Hide CTA/Download PDF section (last section with download buttons)
+          const allSections = clonedElement.querySelectorAll('section')
+          const lastSection = allSections[allSections.length - 1]
+          if (lastSection && lastSection.querySelector('button')) {
+            ;(lastSection as HTMLElement).style.display = 'none'
+          }
         }
       },
     })
@@ -543,179 +550,225 @@ export async function generatePropuestaEditorialPDF(
   addText('NORGESTION', 'label')
   addSpacer(5)
 
-  addText('Consolidación y', 'title')
-  addText('Expansión', 'title')
-  addText('2026', 'title')
+  addText('Propuesta estratégica:', 'title', 12)
+  addText('consolidación y expansión', 'title', 12)
+  addText('2026', 'title', 12)
   addSpacer(10)
 
-  addText('Propuesta estratégica para mantener el liderazgo digital y expandir el alcance a nuevos mercados y verticales.', 'body', 6)
+  addText('Plan de trabajo para mantener el liderazgo actual y expandir el alcance hacia nuevos mercados, verticales, modelos de inteligencia (GEO) y reputación de marca.', 'body', 6)
 
   addSpacer(20)
   addHorizontalLine()
 
-  onProgress?.(30)
+  onProgress?.(20)
 
   // ============================================
-  // PAGE 2: STRATEGY
+  // PAGE 2: OBJETIVOS ESTRATÉGICOS
   // ============================================
   addPage()
 
-  addText('Estrategia', 'label')
+  addText('Objetivos', 'label')
   addSpacer(5)
-  addText('Líneas de trabajo 2026', 'h1')
+  addText('Objetivos estratégicos', 'h1')
   addSpacer(5)
-  addText('Cuatro ejes estratégicos para consolidar el liderazgo y expandir el alcance.', 'body', 6)
+  addText('Cuatro ejes para consolidar el liderazgo y expandir el alcance.', 'body', 6)
   addSpacer(15)
 
-  const strategies = [
+  const objetivos = [
     {
       number: '01',
-      title: 'Verticales sectoriales',
-      description: 'Posicionarse como experto en sectores específicos de alto valor.',
-      sectors: ['Energía: Renovables, oil&gas, utilities', 'Industria: Manufactureras, automoción', 'Agroalimentario: Bodegas, cooperativas', 'Audiovisual: Productoras, contenido digital'],
-      objective: 'Captar operaciones de clientes que buscan asesores especializados en su sector.',
+      title: 'Defensa del liderazgo',
+      description: 'Sostener la hegemonía actual mediante una micro-gestión de keywords y un refuerzo semántico específico para cada área de práctica, ejecutando un blindaje geográfico en plazas clave.',
     },
     {
       number: '02',
-      title: 'Blindaje geográfico',
-      description: 'Dominar las búsquedas locales en mercados estratégicos.',
-      sectors: ['M&A Valencia', 'Corporate Finance Sevilla', 'Venta empresa País Vasco', 'Reestructuración Galicia'],
-      objective: 'Ser la primera opción cuando un empresario busca asesoramiento en su ciudad.',
+      title: 'Expansión de fronteras',
+      description: 'Escalar la estrategia de verticales sectoriales (validada como activo) y desplegar la internacionalización, aprovechando que la arquitectura web ya está preparada y nuestra capacidad de posicionamiento internacional validada.',
     },
     {
       number: '03',
-      title: 'Expansión internacional',
-      description: 'Captar operaciones cross-border e inversores extranjeros.',
-      sectors: ['M&A advisor Spain', 'Sell company Spain', 'Spanish market entry', 'Tech M&A Spain'],
-      objective: 'Posicionar a NORGESTION como puerta de entrada al mercado español.',
+      title: 'Consolidación del canal social',
+      description: 'Mantener la frecuencia y tipología de contenidos en LinkedIn, profundizando en los insights de los socios como motor de confianza y autoridad de marca.',
     },
     {
       number: '04',
-      title: 'Autoridad y reputación',
-      description: 'Reforzar la credibilidad offline que impulsa el posicionamiento online.',
-      sectors: ['Presencia en medios especializados', 'Artículos de opinión en publicaciones del sector', 'Menciones en rankings y directorios', 'Participación en eventos del sector'],
-      objective: 'Que las menciones externas refuercen la autoridad web.',
+      title: 'Inteligencia de flujo',
+      description: 'Implementar un panel de control ad-hoc para monitorizar no solo tráfico, sino eventos de negocio (copias de teléfono, clics en email) y optimizar la tasa de conversión mediante mejoras narrativas (CRO).',
     },
   ]
 
-  strategies.forEach((strategy) => {
-    checkPageBreak(60)
+  objetivos.forEach((obj) => {
+    checkPageBreak(35)
     setFont('label')
-    pdf.text(strategy.number, margin, y)
+    pdf.text(obj.number, margin, y)
     setFont('h2')
-    pdf.text(strategy.title, margin + 12, y)
+    pdf.text(obj.title, margin + 12, y)
     y += 8
 
     setFont('body')
-    const descLines = pdf.splitTextToSize(strategy.description, contentWidth - 12)
+    const descLines = pdf.splitTextToSize(obj.description, contentWidth)
     pdf.text(descLines, margin, y)
-    y += descLines.length * 5 + 5
-
-    strategy.sectors.forEach((sector) => {
-      addText('• ' + sector, 'body', 5)
-    })
-
-    addSpacer(5)
-    setFont('small')
-    pdf.text('Objetivo: ' + strategy.objective, margin, y)
-    y += 10
-    addSpacer(5)
+    y += descLines.length * 5 + 10
   })
+
+  onProgress?.(35)
+
+  // ============================================
+  // PAGE 3: LÍNEAS DE ACTUACIÓN
+  // ============================================
+  addPage()
+
+  addText('Actuación', 'label')
+  addSpacer(5)
+  addText('Líneas de actuación', 'h1')
+  addSpacer(5)
+  addText('Seis tácticas complementarias para alcanzar los objetivos.', 'body', 6)
+  addSpacer(15)
+
+  const acciones = [
+    {
+      number: '01',
+      title: 'Profundización sectorial',
+      description: 'Desarrollo de nuevas verticales especializadas (ej: Energía, Industria, Agrobio, Cine/Audiovisual, etc.) para captar tráfico de nicho cualificado.',
+    },
+    {
+      number: '02',
+      title: 'Despliegue geográfico',
+      description: 'Creación de páginas optimizadas para búsquedas locales estratégicas, asegurando la relevancia en las principales plazas de la firma.',
+    },
+    {
+      number: '03',
+      title: 'Internacionalización selectiva',
+      description: 'Traducción estratégica de contenidos clave y verticales de sector para capturar tráfico cross-border de alta intención.',
+    },
+    {
+      number: '04',
+      title: 'Ampliación semántica (SEO content)',
+      description: 'Profundización semántica en las páginas de servicio actuales y expansión del blog corporativo mediante contenidos SEO basados en clústeres temáticos.',
+    },
+    {
+      number: '05',
+      title: 'Analítica de negocio (BI)',
+      description: 'Desarrollo e implementación de un panel de Business Intelligence propio para la analítica digital y seguimiento del funnel de conversión.',
+    },
+    {
+      number: '06',
+      title: 'Autoridad de marca y preparación IA',
+      description: 'Estrategia de linkbuilding y PR digital enfocada en conseguir enlaces en medios relevantes.',
+    },
+  ]
+
+  acciones.forEach((accion) => {
+    checkPageBreak(30)
+    setFont('label')
+    pdf.text(accion.number, margin, y)
+    setFont('h3')
+    pdf.text(accion.title, margin + 12, y)
+    y += 7
+
+    setFont('body')
+    const descLines = pdf.splitTextToSize(accion.description, contentWidth)
+    pdf.text(descLines, margin, y)
+    y += descLines.length * 5 + 8
+  })
+
+  addSpacer(5)
+  addHorizontalLine()
+  addText('Hipótesis estratégica', 'h3')
+  addSpacer(3)
+  addText('Anticipamos que la autoridad de dominio en Google, sumada a la presencia en fuentes externas, será el factor determinante para ser citado como referencia por los futuros modelos de IA generativa.', 'body', 6)
 
   onProgress?.(50)
 
   // ============================================
-  // PAGE 3: ROADMAP
-  // ============================================
-  addPage()
-
-  addText('Hoja de Ruta', 'label')
-  addSpacer(5)
-  addText('Calendario de ejecución', 'h1')
-  addSpacer(5)
-  addText('Distribución del trabajo a lo largo del año.', 'body', 6)
-  addSpacer(15)
-
-  const quarters = [
-    {
-      label: 'Q1 — Enero - Marzo',
-      items: ['Auditoría de posiciones actuales', 'Definición de verticales prioritarias', 'Estructura de landings sectoriales', 'Inicio vertical Energía'],
-    },
-    {
-      label: 'Q2 — Abril - Junio',
-      items: ['Lanzamiento vertical Industria', 'Blindaje geográfico: Valencia, Sevilla', 'Optimización de posiciones existentes', 'Campaña de autoridad en medios'],
-    },
-    {
-      label: 'Q3 — Julio - Septiembre',
-      items: ['Vertical Agroalimentario', 'Estructura internacional (inglés)', 'Blindaje geográfico: Galicia, Aragón', 'Análisis de competencia'],
-    },
-    {
-      label: 'Q4 — Octubre - Diciembre',
-      items: ['Vertical Audiovisual', 'Consolidación internacional', 'Optimización general', 'Informe anual y planificación 2027'],
-    },
-  ]
-
-  quarters.forEach((quarter) => {
-    checkPageBreak(40)
-    addText(quarter.label, 'h2')
-    addSpacer(5)
-    quarter.items.forEach((item) => {
-      addText('• ' + item, 'body', 5)
-    })
-    addSpacer(10)
-  })
-
-  onProgress?.(70)
-
-  // ============================================
-  // PAGE 4: PRICING
+  // PAGE 4: PROPUESTA ECONÓMICA
   // ============================================
   addPage()
 
   addText('Inversión', 'label')
   addSpacer(5)
   addText('Propuesta económica', 'h1')
-  addSpacer(5)
-  addText('Cuota integral que incluye todos los servicios necesarios para ejecutar la estrategia.', 'body', 6)
   addSpacer(15)
 
-  addText('Servicios incluidos', 'h2')
-  addSpacer(8)
+  addText('Desglose de servicios recurrentes', 'h2')
+  addSpacer(10)
 
   const services = [
-    { title: 'Dirección estratégica', desc: 'Reuniones periódicas, análisis de competencia, ajuste de prioridades según objetivos de negocio.' },
-    { title: 'Diseño y desarrollo web', desc: 'Nuevas páginas, mejoras de experiencia de usuario, adaptación continua a dispositivos.' },
-    { title: 'Posicionamiento SEO', desc: 'Optimización técnica, creación de contenido estratégico, mejora continua de posiciones.' },
-    { title: 'Gestión LinkedIn', desc: 'Publicaciones para perfil corporativo y socios, interacción, crecimiento de audiencia.' },
-    { title: 'Estrategia internacional', desc: 'Contenido en inglés, optimización para mercados extranjeros, captación internacional.' },
-    { title: 'Soporte tecnológico', desc: 'Mantenimiento, seguridad, implementación de nuevas funcionalidades.' },
+    { title: 'Dirección y acompañamiento', concepto: 'Dirección de cuenta y estrategia.', detalle: 'Planificación anual, acompañamiento semanal y supervisión mensual de KPIs de negocio.' },
+    { title: 'Diseño y desarrollo web', concepto: 'Desarrollo y gestión en Webflow.', detalle: 'Diseño UI/UX de nuevas landing pages, desarrollo evolutivo del site, gestiones del día a día y optimización técnica continua.' },
+    { title: 'SEO técnico y de contenidos (On-page)', concepto: 'Crecimiento orgánico.', detalle: 'Optimización semántica continua, enlazado interno y redacción técnica de contenidos para blog y servicios.' },
+    { title: 'Estrategia LinkedIn y diseño visual', concepto: 'Editorial y diseño gráfico.', detalle: 'Diseño gráfico de piezas visuales, redacción editorial de posts, gestión integral del calendario y curación de insights de los socios.' },
+    { title: 'Autoridad y difusión (Off-page)', concepto: 'Reputación digital.', detalle: 'Estrategia de linkbuilding y búsqueda activa de oportunidades de aparición en medios externos con enlaces hacia nuestra página para reforzar la autoridad.' },
+    { title: 'Infraestructura tecnológica (IA)', concepto: 'Capa de inteligencia.', detalle: 'Acceso y computación de modelos de lenguaje de vanguardia para análisis de datos, toma de decisiones, comprensión del contexto, redacción y enfoque de contenidos.' },
   ]
 
   services.forEach((service) => {
-    checkPageBreak(20)
+    checkPageBreak(25)
     addText(service.title, 'h3')
-    addText(service.desc, 'body', 5)
-    addSpacer(8)
+    setFont('small')
+    pdf.text(service.concepto, margin, y)
+    y += 5
+    setFont('body')
+    const detLines = pdf.splitTextToSize(service.detalle, contentWidth)
+    pdf.text(detLines, margin, y)
+    y += detLines.length * 5 + 8
+  })
+
+  addSpacer(5)
+  addHorizontalLine()
+
+  setFont('h2')
+  pdf.text('Inversión mensual', margin, y)
+  setFont('h1')
+  pdf.text('7.950 €', pageWidth - margin - 30, y)
+  y += 15
+
+  setFont('small')
+  pdf.setFont('helvetica', 'italic')
+  const disclaimer = 'Condiciones exclusivas para NORGESTION. Estos términos no constituyen una oferta pública y no deben tomarse como precios de referencia.'
+  const discLines = pdf.splitTextToSize(disclaimer, contentWidth)
+  pdf.text(discLines, margin, y)
+  y += discLines.length * 4
+
+  onProgress?.(70)
+
+  // ============================================
+  // PAGE 5: CALENDARIO Y FILOSOFÍA
+  // ============================================
+  addPage()
+
+  addText('Siguientes pasos', 'label')
+  addSpacer(5)
+  addText('Calendario de activación', 'h1')
+  addSpacer(15)
+
+  const pasos = [
+    { periodo: 'Febrero 2026', titulo: 'Definición del cronograma', desc: 'Establecimiento del plan de acción anual detallado y continuidad de las líneas de trabajo actuales.' },
+    { periodo: 'Marzo 2026 — Marzo 2027', titulo: 'Ejecución del plan', desc: 'Implementación de la estrategia establecida con revisiones generales de analítica cuatrimestrales.' },
+  ]
+
+  pasos.forEach((paso) => {
+    checkPageBreak(25)
+    setFont('label')
+    pdf.text(paso.periodo.toUpperCase(), margin, y)
+    y += 6
+    addText(paso.titulo, 'h2')
+    addText(paso.desc, 'body', 5)
+    addSpacer(12)
   })
 
   addSpacer(10)
   addHorizontalLine()
 
-  addText('Notas adicionales', 'h2')
+  addText('Filosofía', 'label')
+  addSpacer(5)
+  addText('Nuestra posición ante la tecnología', 'h1')
+  addSpacer(10)
+
+  addText('Mantenemos una filosofía cauta de construcción sólida. Rechazamos la automatización masiva de contenidos generados por IA sin supervisión.', 'h3')
   addSpacer(8)
 
-  const notes = [
-    { title: 'ROI estimado', desc: 'Con un fee medio de operación de [X]€, la inversión anual se recupera con [X] operaciones originadas digitalmente.' },
-    { title: 'Comparativa', desc: 'La alternativa sería contratar una agencia externa (sin conocimiento del sector) o un equipo interno (mayor coste fijo).' },
-    { title: 'Compromiso', desc: 'Facturación mensual. Revisión trimestral de resultados y ajuste de prioridades.' },
-  ]
-
-  notes.forEach((note) => {
-    checkPageBreak(20)
-    addText(note.title, 'h3')
-    addText(note.desc, 'body', 5)
-    addSpacer(8)
-  })
+  addText('Nuestra estrategia integra los modelos de inteligencia artificial más potentes del mercado con curiosidad técnica, pero siempre bajo una dirección humana experta. Utilizamos la tecnología para potenciar el análisis, la creatividad y las capacidades del equipo, no para sustituirlas.', 'body', 6)
 
   // Footer
   addSpacer(20)

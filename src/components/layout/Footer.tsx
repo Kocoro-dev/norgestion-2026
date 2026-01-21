@@ -14,7 +14,7 @@ export function Footer() {
             unoptimized
           />
           <p className="text-[14px] text-white/70">
-            Documento confidencial © 2026
+            Documento confidencial elaborado por kingseo © 2026
           </p>
         </div>
       </div>
