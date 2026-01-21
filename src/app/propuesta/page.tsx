@@ -11,7 +11,7 @@ import {
 
 const navItems = [
   { label: 'Estrategia', href: '#estrategia' },
-  { label: 'Hoja de Ruta', href: '#roadmap' },
+  { label: 'Hoja de ruta', href: '#roadmap' },
   { label: 'Inversión', href: '#inversion' },
 ]
 

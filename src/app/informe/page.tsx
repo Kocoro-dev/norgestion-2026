@@ -1,4 +1,7 @@
+'use client'
+
 import { Navbar, Footer } from '@/components/layout'
+import { PasswordProtection } from '@/components/PasswordProtection'
 import {
   HeroSection,
   AnalysisSection,
@@ -36,7 +39,11 @@ export default function InformePage() {
   const allKeywords = getSortedKeywords()
 
   return (
-    <>
+    <PasswordProtection
+      storageKey="norgestion-informe-access"
+      password="NOR2026"
+      backgroundImage="/images/hero-bg-2-hd.png"
+    >
       <Navbar items={navItems} />
 
       <main id="pdf-content">
@@ -69,7 +76,7 @@ export default function InformePage() {
         {/* Analysis */}
         <AnalysisSection
           label="01 — Vista general de datos"
-          title="Análisis del Tráfico Web"
+          title="Análisis del tráfico web"
           subtitle="Análisis del rendimiento web y los indicadores clave que demuestran la calidad del tráfico y el posicionamiento de NORGESTION."
           disclaimer="Todos los datos han sido obtenidos de Google Analytics y Google Search Console. Representan datos acumulados de los últimos 3 meses."
         />
@@ -94,8 +101,8 @@ export default function InformePage() {
 
         {/* Ranking por Página */}
         <RankingSection
-          label="02.1 — Tráfico Real"
-          title="Ranking por Páginas: Interés del Usuario"
+          label="02.1 — Tráfico real"
+          title="Ranking por páginas: interés del usuario"
           subtitle="Las páginas más visitadas dentro de la web de NORGESTION."
           variant="pages"
           data={pageRankings.map(p => ({ name: p.title, value: p.views }))}
@@ -116,40 +123,42 @@ export default function InformePage() {
 
         {/* LinkedIn */}
         <LinkedInSection
-          label="03 — LinkedIn Corporativo"
-          title="Escaparate Social"
+          label="03 — LinkedIn corporativo"
+          title="Escaparate social"
           subtitle="Rendimiento del canal corporativo y validación de la estrategia de contenidos."
           disclaimer="Datos obtenidos de LinkedIn Analytics. Representan métricas acumuladas del último trimestre."
         />
 
         {/* Impact */}
         <ImpactSection
-          label="04 — Impacto en Negocio"
-          title="Activación de la Originación Digital"
+          label="04 — Impacto en negocio"
+          title="Activación de la originación digital"
           subtitle="Evolución del canal web: Aumento significativo en la generación activa de contactos comerciales en 2025."
           disclaimer="Datos agregados del formulario de contacto web durante 2025. La categorización se realiza en base al contenido del mensaje recibido. La información se analiza respetando la privacidad de datos y con fines exclusivamente analíticos; ningún dato personal es almacenado por nosotros."
         />
 
         {/* Competitive Environment */}
         <CompetitiveSection
-          label="05 — Entorno Competitivo"
-          title="Respuesta del Mercado"
+          label="05 — Entorno competitivo"
+          title="Respuesta del mercado"
           subtitle="Análisis de la reacción de los competidores y evaluación de la ventaja estructural."
         />
 
-        {/* CTA - PDF Download */}
-        <CTASection
-          title="Descargar informe"
-          description="Genera un PDF con el contenido de este informe."
-          buttonText="Descargar PDF Visual"
-          mode="pdf"
-          pdfTargetId="pdf-content"
-          pdfFilename="NORGESTION-Informe-Ecosistema-Digital-2025.pdf"
-          variant="light"
-        />
+        {/* CTA - PDF Download (hidden in PDF) */}
+        <div className="pdf-hide">
+          <CTASection
+            title="Descargar informe"
+            description="Genera un PDF con el contenido de este informe."
+            buttonText="Descargar PDF Visual"
+            mode="pdf"
+            pdfTargetId="pdf-content"
+            pdfFilename="NORGESTION-Informe-Ecosistema-Digital-2025.pdf"
+            variant="light"
+          />
+        </div>
       </main>
 
       <Footer />
-    </>
+    </PasswordProtection>
   )
 }

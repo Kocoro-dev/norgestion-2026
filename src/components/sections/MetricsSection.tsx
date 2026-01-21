@@ -156,12 +156,12 @@ export function MetricsSection({ label, title, description, metrics }: MetricsSe
             ))}
           </div>
 
-          <div ref={chartRef} className="bg-white p-8">
-            <h4 className="font-medium text-[#11191C] mb-6">
+          <div ref={chartRef} className="bg-white p-5 md:p-8">
+            <h4 className="font-medium text-[#11191C] mb-4 md:mb-6">
               Origen del tráfico
             </h4>
-            <div className="flex items-center justify-center h-[200px] mb-6">
-              <div className="relative w-48 h-48">
+            <div className="flex items-center justify-center h-[140px] md:h-[200px] mb-4 md:mb-6">
+              <div className="relative w-32 h-32 md:w-48 md:h-48">
                 <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                   <circle
                     cx="50"
@@ -183,18 +183,18 @@ export function MetricsSection({ label, title, description, metrics }: MetricsSe
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-2xl font-semibold text-[#11191C]">65%</span>
+                  <span className="text-xl md:text-2xl font-semibold text-[#11191C]">65%</span>
                 </div>
               </div>
             </div>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="w-3 h-3 bg-[#016936]" />
-                <span className="text-sm text-[#666666]">Buscan soluciones (65%)</span>
+            <div className="space-y-2 md:space-y-3">
+              <div className="flex items-center gap-2 md:gap-3">
+                <span className="w-2.5 h-2.5 md:w-3 md:h-3 bg-[#016936] flex-shrink-0" />
+                <span className="text-xs md:text-sm text-[#666666]">Buscan soluciones (65%)</span>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="w-3 h-3 bg-[#E5E5E5]" />
-                <span className="text-sm text-[#666666]">Buscan "Norgestion" (35%)</span>
+              <div className="flex items-center gap-2 md:gap-3">
+                <span className="w-2.5 h-2.5 md:w-3 md:h-3 bg-[#E5E5E5] flex-shrink-0" />
+                <span className="text-xs md:text-sm text-[#666666]">Buscan "Norgestion" (35%)</span>
               </div>
             </div>
           </div>
