@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   title: "Estrategia Digital 2026 | NORGESTION",
   description: "Análisis de resultados 2025 y propuesta de continuidad para la consolidación del liderazgo digital de NORGESTION.",
   robots: "noindex, nofollow",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
 }
 
 export default function RootLayout({
