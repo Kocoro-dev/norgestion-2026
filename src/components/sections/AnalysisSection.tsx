@@ -469,7 +469,7 @@ function InternationalExposure({
               <Globe className="w-5 h-5 text-[#016936]" strokeWidth={1.5} />
             </div>
             <span className="text-[13px] font-medium uppercase tracking-wider text-[#6e6e73]">
-              Exposición Internacional
+              Exposición internacional
             </span>
           </div>
           <div className="text-[64px] font-extralight text-[#1d1d1f] leading-none mb-3">
@@ -555,7 +555,7 @@ export function AnalysisSection({
             <div className="flex items-center gap-2 mb-8">
               <TrendingUp className="w-4 h-4 text-[#016936]" strokeWidth={1.5} />
               <span className="text-[12px] font-medium uppercase tracking-wider text-[#6e6e73]">
-                Volumen y Alcance
+                Volumen y alcance
               </span>
             </div>
             <div className="space-y-10">
@@ -611,7 +611,7 @@ export function AnalysisSection({
           {/* Column 3: Acquisition Structure */}
           <div className="bg-white border border-slate-200/60 shadow-[0_1px_3px_rgba(0,0,0,0.04)] p-8">
             <div className="text-[12px] font-medium uppercase tracking-wider text-[#6e6e73] mb-6">
-              Estructura de Adquisición
+              Estructura de adquisición
             </div>
             <PremiumDonutChart
               data={trafficSources}

@@ -29,6 +29,7 @@ export async function generateVisualPDF(
 
   try {
     document.body.style.overflow = 'visible'
+    document.body.classList.add('pdf-generating')
 
     onProgress?.(20)
 
@@ -41,8 +42,17 @@ export async function generateVisualPDF(
       logging: false,
       windowWidth: 1200,
       onclone: (clonedDoc) => {
+        // Add pdf-generating class to cloned document body
+        clonedDoc.body.classList.add('pdf-generating')
+
         const clonedElement = clonedDoc.getElementById(elementId)
         if (clonedElement) {
+          // Hide elements marked with pdf-hide class
+          const pdfHideElements = clonedElement.querySelectorAll('.pdf-hide')
+          pdfHideElements.forEach((el) => {
+            ;(el as HTMLElement).style.display = 'none'
+          })
+
           // Remove interactive navigation elements
           const navButtons = clonedElement.querySelectorAll('button[aria-label*="Previous"], button[aria-label*="Next"], button[aria-label*="slide"], button[aria-label*="Close"]')
           navButtons.forEach((btn) => {
@@ -53,11 +63,23 @@ export async function generateVisualPDF(
           const lightbox = clonedElement.querySelector('[class*="fixed inset-0 z-50"]')
           if (lightbox) lightbox.remove()
 
-          // Show table content without scroll
-          const scrollContainers = clonedElement.querySelectorAll('[class*="max-h-"]')
+          // For tables: keep a reasonable max-height to prevent overflow
+          // but still show more content than the scrollable view
+          const tableContainers = clonedElement.querySelectorAll('.table-scroll-container')
+          tableContainers.forEach((container) => {
+            ;(container as HTMLElement).style.maxHeight = '800px'
+            ;(container as HTMLElement).style.overflow = 'hidden'
+          })
+
+          // For other scroll containers, keep reasonable limits
+          const scrollContainers = clonedElement.querySelectorAll('[class*="max-h-"]:not(.table-scroll-container)')
           scrollContainers.forEach((container) => {
-            ;(container as HTMLElement).style.maxHeight = 'none'
-            ;(container as HTMLElement).style.overflow = 'visible'
+            const el = container as HTMLElement
+            // Only expand if it's not a table
+            if (!el.querySelector('table')) {
+              el.style.maxHeight = 'none'
+              el.style.overflow = 'visible'
+            }
           })
 
           // Hide slider navigation dots and progress
@@ -71,11 +93,36 @@ export async function generateVisualPDF(
             ;(bar as HTMLElement).style.display = 'none'
           })
 
-          // Hide CTA/Download PDF section (last section with download buttons)
-          const allSections = clonedElement.querySelectorAll('section')
-          const lastSection = allSections[allSections.length - 1]
-          if (lastSection && lastSection.querySelector('button')) {
-            ;(lastSection as HTMLElement).style.display = 'none'
+          // === PAGE BREAK HANDLING ===
+          // Calculate page height in pixels (A4 at 1200px width = ~1697px height)
+          const pageHeightPx = 1697
+
+          // Get all major sections that should ideally start on a new page
+          const sections = clonedElement.querySelectorAll('section[id]')
+
+          sections.forEach((section) => {
+            const sectionEl = section as HTMLElement
+            const rect = sectionEl.getBoundingClientRect()
+            const sectionTop = rect.top + clonedDoc.documentElement.scrollTop
+
+            // Calculate which page this section starts on
+            const pageNumber = Math.floor(sectionTop / pageHeightPx)
+            const positionOnPage = sectionTop - (pageNumber * pageHeightPx)
+
+            // If the section starts in the bottom 15% of a page, push it to the next page
+            // This prevents sections from starting too close to a page break
+            const threshold = pageHeightPx * 0.85
+
+            if (positionOnPage > threshold) {
+              const paddingNeeded = pageHeightPx - positionOnPage + 40 // 40px extra spacing
+              sectionEl.style.paddingTop = `${paddingNeeded}px`
+            }
+          })
+
+          // Add extra padding to last section to fill page with dark background
+          const lastSection = clonedElement.querySelector('#competitivo')
+          if (lastSection) {
+            ;(lastSection as HTMLElement).style.paddingBottom = '600px'
           }
         }
       },
@@ -98,12 +145,16 @@ export async function generateVisualPDF(
     let position = 0
     const imgData = canvas.toDataURL('image/jpeg', 0.95)
 
+    // Calculate total pages needed (avoiding nearly-blank trailing pages)
+    // If the last page would have less than 10% content, skip it
+    const minContentThreshold = pageHeight * 0.1
+
     // First page
     pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight)
     heightLeft -= pageHeight
 
-    // Additional pages
-    while (heightLeft > 0) {
+    // Additional pages (skip if remaining content is too small)
+    while (heightLeft > minContentThreshold) {
       position = heightLeft - imgHeight
       pdf.addPage()
       pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight)
@@ -117,6 +168,7 @@ export async function generateVisualPDF(
     onProgress?.(100)
   } finally {
     document.body.style.overflow = originalOverflow
+    document.body.classList.remove('pdf-generating')
   }
 }
 
@@ -237,12 +289,14 @@ export async function generateEditorialPDF(
   addText('NORGESTION', 'label')
   addSpacer(5)
 
-  addText('Análisis del', 'title')
-  addText('Ecosistema Digital', 'title')
+  addText('Análisis de la', 'title')
+  addSpacer(4)
+  addText('Estrategia Digital', 'title')
+  addSpacer(4)
   addText('2025', 'title')
-  addSpacer(10)
+  addSpacer(12)
 
-  addText('Evaluación del rendimiento de la estrategia digital y el posicionamiento de NORGESTION en el mercado de M&A y Corporate Finance.', 'body', 6)
+  addText('Evaluación del rendimiento de la estrategia digital y el posicionamiento de NORGESTION en los mercados de Corporate Finance, M&A, Advisory & Interim Management y Asesoramiento Jurídico-Fiscal.', 'body', 6)
 
   addSpacer(20)
   addHorizontalLine()
@@ -254,7 +308,7 @@ export async function generateEditorialPDF(
   const summaryPoints = [
     { num: '01', title: 'Liderazgo digital', desc: 'Dominio en búsquedas de alto valor en Google y creciente presencia en resultados de IA generativa.' },
     { num: '02', title: 'Validación de originación', desc: 'Aumento sostenido de contactos comerciales orgánicos generados a través del canal digital.' },
-    { num: '03', title: 'Proyección internacional', desc: 'La web actúa como escaparate para inversores extranjeros interesados en el middle market español.' },
+    { num: '03', title: 'Proyección internacional', desc: 'La web actúa como escaparate para personas extranjeras interesadas en el middle market español.' },
   ]
 
   summaryPoints.forEach((point) => {
@@ -279,17 +333,19 @@ export async function generateEditorialPDF(
 
   addText('01 — Vista general de datos', 'label')
   addSpacer(5)
-  addText('Salud del ecosistema digital', 'h1')
+  addText('Análisis del tráfico web', 'h1')
   addSpacer(5)
   addText('Análisis del rendimiento web y los indicadores clave que demuestran la calidad del tráfico y el posicionamiento de NORGESTION.', 'body', 6)
   addSpacer(15)
 
   // Stats grid
   const analysisStats = [
-    { value: '5.800+', label: 'Impresiones en Google', desc: 'Número de veces que NORGESTION aparece en resultados de búsqueda.' },
-    { value: '2:30', label: 'Tiempo medio en sitio', desc: 'Los visitantes dedican tiempo real a explorar el contenido.' },
-    { value: '65%', label: 'Independencia de marca', desc: 'Visitas que llegan buscando soluciones, no "Norgestion".' },
-    { value: '53%', label: 'Engagement rate', desc: 'Más de la mitad interactúa activamente con el contenido.' },
+    { value: '15.760', label: 'Sesiones', desc: 'Visitas totales en los últimos 3 meses.' },
+    { value: '308.715', label: 'Impresiones en Google', desc: 'Número de veces que NORGESTION aparece en resultados de búsqueda.' },
+    { value: '2:26', label: 'Tiempo medio de sesión', desc: 'Los visitantes dedican más de 2 minutos explorando el contenido.' },
+    { value: '53%', label: 'Ratio de engagement', desc: 'Más de la mitad de los visitantes interactúan activamente con la web.' },
+    { value: '65%', label: 'Descubrimiento sin marca', desc: 'De las búsquedas orgánicas, el 65% no incluye "NORGESTION". Son potenciales clientes que no conocían la firma.' },
+    { value: '32%', label: 'Exposición internacional', desc: 'Del tráfico total proviene de fuera de España.' },
   ]
 
   analysisStats.forEach((stat) => {
@@ -322,8 +378,8 @@ export async function generateEditorialPDF(
 
   // Main stats
   const leadershipStats = [
-    { value: '100+', label: 'Keywords en Top 5' },
-    { value: '57', label: 'Keywords en #1' },
+    { value: '50+', label: 'Keywords en #1' },
+    { value: '130+', label: 'Keywords en Top 5' },
     { value: '0€', label: 'Inversión en Google Ads' },
   ]
 
@@ -355,81 +411,148 @@ export async function generateEditorialPDF(
   onProgress?.(70)
 
   // ============================================
-  // PAGE 4: IMPACT
+  // PAGE 4: LINKEDIN
   // ============================================
   addPage()
 
-  addText('03 — Impacto', 'label')
+  addText('03 — LinkedIn corporativo', 'label')
   addSpacer(5)
-  addText('Generación de negocio', 'h1')
+  addText('Escaparate social', 'h1')
   addSpacer(5)
-  addText('El canal digital como herramienta de originación de operaciones.', 'body', 6)
+  addText('Rendimiento del canal corporativo y validación de la estrategia de contenidos.', 'body', 6)
   addSpacer(15)
 
-  addText('Contactos cualificados recibidos en 2025', 'h2')
+  addText('Métricas trimestrales', 'h2')
   addSpacer(10)
 
-  const leadTypes = [
-    { title: 'Venta de empresa', desc: 'Empresarios interesados en vender su compañía' },
-    { title: 'Búsqueda de adquisiciones', desc: 'Inversores buscando oportunidades de compra' },
-    { title: 'Captación de talento', desc: 'Profesionales interesados en unirse al equipo' },
-    { title: 'Otras consultas', desc: 'Servicios específicos, colaboraciones' },
+  const linkedInStats = [
+    { value: '45.180', label: 'Impresiones totales', desc: 'Alcance acumulado del contenido publicado.' },
+    { value: '3.455', label: 'Clics totales', desc: 'Interacciones que generan tráfico.' },
+    { value: '475', label: 'Recomendaciones', desc: 'Validación social del contenido.' },
+    { value: '32', label: 'Veces compartido', desc: 'Amplificación orgánica del alcance.' },
   ]
 
-  leadTypes.forEach((lead) => {
-    checkPageBreak(20)
-    addText(lead.title, 'h3')
-    addText(lead.desc, 'body', 5)
+  linkedInStats.forEach((stat) => {
+    checkPageBreak(30)
+    addStat(stat.value, stat.label)
+    addText(stat.desc, 'body', 5)
     addSpacer(8)
   })
 
   addSpacer(10)
-  addText('Alcance internacional', 'h2')
-  addSpacer(5)
-  addText('Contactos recibidos desde España, EE.UU., Alemania, Latam y otros mercados. La web actúa como escaparate para inversores extranjeros interesados en el mercado español.', 'body', 6)
+  addText('Análisis estratégico', 'h2')
+  addSpacer(8)
+
+  const linkedInInsights = [
+    { title: 'Efectividad del aumento de frecuencia', desc: 'El incremento en la cadencia de publicación ha resultado en un crecimiento neto del alcance acumulado.' },
+    { title: 'Dualidad de formatos', desc: 'Las publicaciones visuales son clave para maximizar la visibilidad, mientras que las galerías y artículos técnicos concentran la generación de clics.' },
+    { title: 'Coherencia omnicanal', desc: 'El interés en la web se alinea con la estrategia de humanización en LinkedIn, reforzando la confianza digital.' },
+  ]
+
+  linkedInInsights.forEach((insight) => {
+    checkPageBreak(20)
+    addText(insight.title, 'h3')
+    addText(insight.desc, 'body', 5)
+    addSpacer(8)
+  })
+
+  onProgress?.(75)
+
+  // ============================================
+  // PAGE 5: IMPACT
+  // ============================================
+  addPage()
+
+  addText('04 — Impacto en negocio', 'label')
+  addSpacer(4)
+  addText('Activación de la originación digital', 'h1')
+  addSpacer(4)
+  addText('Evolución del canal web: Aumento significativo en la generación activa de contactos comerciales en 2025.', 'body', 6)
+  addSpacer(12)
+
+  addText('Contactos recibidos en 2025', 'h2')
+  addSpacer(8)
+
+  const impactCategories = [
+    { value: '61', label: 'Contactos de negocio', desc: 'M&A, Inversores, Consultas de servicios.' },
+    { value: '50', label: 'Captación de talento', desc: 'Candidatos de empleo y prácticas.' },
+    { value: '18', label: 'Interim Pool', desc: 'Solicitudes de adhesión al equipo.' },
+  ]
+
+  impactCategories.forEach((cat) => {
+    checkPageBreak(25)
+    addStat(cat.value, cat.label)
+    addText(cat.desc, 'body', 5)
+    addSpacer(6)
+  })
+
+  addSpacer(8)
+  addText('Hallazgos clave', 'h2')
+  addSpacer(6)
+
+  const impactInsights = [
+    { title: 'Cualificación del flujo', desc: 'En 2025 se ha aumentado significativamente el volumen de consultas con intención comercial, validando la web como herramienta de soporte a la originación.' },
+    { title: 'Tracción vertical', desc: 'La vertical de M&A Software ha generado contactos específicos del sector, demostrando que el contenido de nicho atrae contrapartes cualificadas.' },
+    { title: 'Alcance cross-border', desc: 'Se registran entradas de contacto procedentes de mercados exteriores, correlacionando con el aumento de tráfico internacional.' },
+  ]
+
+  impactInsights.forEach((insight) => {
+    checkPageBreak(18)
+    addText(insight.title, 'h3')
+    addText(insight.desc, 'body', 5)
+    addSpacer(5)
+  })
 
   onProgress?.(85)
 
   // ============================================
-  // PAGE 5: COMPARISON
+  // PAGE 6: COMPETITIVE
   // ============================================
   addPage()
 
-  addText('04 — Ventaja competitiva', 'label')
-  addSpacer(5)
-  addText('El modelo Full Stack', 'h1')
-  addSpacer(5)
-  addText('Por qué NORGESTION tiene una ventaja difícil de replicar.', 'body', 6)
-  addSpacer(15)
+  addText('05 — Entorno competitivo', 'label')
+  addSpacer(4)
+  addText('Respuesta del mercado', 'h1')
+  addSpacer(4)
+  addText('Análisis de la reacción de los competidores y evaluación de la ventaja estructural.', 'body', 6)
+  addSpacer(10)
 
-  addText('Modelo tradicional (competencia)', 'h2')
-  addSpacer(8)
-  const negativePoints = [
-    'Fragmentado: 3-4 proveedores que no se coordinan',
-    'Lento: Cualquier cambio requiere semanas',
-    'Genérico: Webs plantilla sin personalidad',
-    'Vulnerable: Sin capacidad de reacción ante cambios',
+  addText('Radar de movimientos', 'h2')
+  addSpacer(6)
+
+  const competitorInsights = [
+    { title: 'Estrategia de verticalización (Baker Tilly)', desc: 'Se detecta la creación de ecosistemas web satélites para competir en Tech M&A. También se observa mimetismo en su estrategia de LinkedIn.' },
+    { title: 'Penalización técnica (Albia)', desc: 'Competidores han desplegado páginas sectoriales con intención SEO, pero su pérdida de visibilidad sugiere penalización por Core Web Vitals.' },
+    { title: 'Inercia estructural (Big Four)', desc: 'Actores tradicionales muestran dificultades de adaptación. Su rigidez estructural limita su reacción, cediendo terreno en términos transaccionales.' },
   ]
-  negativePoints.forEach((point) => {
-    addText('• ' + point, 'body', 6)
+
+  competitorInsights.forEach((insight) => {
+    checkPageBreak(18)
+    addText(insight.title, 'h3')
+    addText(insight.desc, 'body', 5)
+    addSpacer(5)
   })
 
-  addSpacer(15)
-  addText('Modelo NORGESTION', 'h2')
   addSpacer(8)
-  const positivePoints = [
-    'Centralizado: Todo el conocimiento en un único equipo',
-    'Ágil: Cambios implementados en horas',
-    'Premium: Diseño boutique que refleja posicionamiento',
-    'Preparado: Anticipación a cambios tecnológicos',
-  ]
-  positivePoints.forEach((point) => {
-    addText('• ' + point, 'body', 6)
-  })
+  addText('Ventaja competitiva: el modelo unificado', 'h2')
+  addSpacer(5)
 
-  addSpacer(15)
-  addHorizontalLine()
-  addText('Esta ventaja estructural es difícil de replicar. Un competidor necesitaría años de trabajo consistente y una inversión significativa para igualar la posición de NORGESTION.', 'body', 6)
+  addText('Frente a la fragmentación y la deuda técnica de la competencia, NORGESTION opera bajo un modelo centralizado que integra estrategia, tecnología y narrativa.', 'body', 6)
+  addSpacer(8)
+
+  const strengths = [
+    { title: 'Autoridad de dominio consolidada', desc: 'Trayectoria con presencia digital sistemática que permite posicionar páginas de tercer nivel por encima de portales verticales exclusivos.' },
+    { title: 'Arquitectura web estructural y semántica', desc: 'Base semántica sólida diseñada desde el inicio para escalar sin deuda técnica ni fricción estructural.' },
+    { title: 'Agilidad full stack', desc: 'Control total del ciclo (Estrategia, Diseño, Código, Contenido) que elimina la fricción entre proveedores.' },
+    { title: 'Visión largoplacista', desc: 'Construcción de activos digitales basada en calidad técnica, premiando la calidad frente a la cantidad.' },
+  ]
+
+  strengths.forEach((s) => {
+    checkPageBreak(18)
+    addText(s.title, 'h3')
+    addText(s.desc, 'body', 5)
+    addSpacer(4)
+  })
 
   // Footer
   addSpacer(20)
@@ -618,7 +741,7 @@ export async function generatePropuestaEditorialPDF(
   // ============================================
   addPage()
 
-  addText('Actuación', 'label')
+  addText('Hoja de ruta', 'label')
   addSpacer(5)
   addText('Líneas de actuación', 'h1')
   addSpacer(5)

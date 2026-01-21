@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Lightbulb } from 'lucide-react'
 import {
   Table,
   TableBody,
@@ -38,25 +39,17 @@ function formatNumber(num: number): string {
   return num.toLocaleString('es-ES')
 }
 
-function LightbulbIcon() {
-  return (
-    <svg
-      className="w-4 h-4 text-[#2a9d5c] flex-shrink-0"
-      fill="currentColor"
-      viewBox="0 0 20 20"
-    >
-      <path d="M10 2a6 6 0 00-6 6c0 1.887.872 3.569 2.234 4.668.312.252.566.602.698 1.012l.147.456c.205.64.785 1.094 1.461 1.094h2.92c.676 0 1.256-.454 1.461-1.094l.147-.456c.132-.41.386-.76.698-1.012A5.993 5.993 0 0016 8a6 6 0 00-6-6zm-1.5 14a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5zm.5 1.5a.5.5 0 000 1h2a.5.5 0 000-1h-2z"/>
-    </svg>
-  )
-}
-
 function InsightCard({ title, description }: Insight) {
   return (
     <div className="insight-card bg-[#0d1214] border border-white/[0.06] p-6 hover:border-[#016936]/30 transition-colors duration-300">
-      <h4 className="flex items-center gap-2 text-[16px] font-medium text-white mb-3">
-        <LightbulbIcon />
-        {title}
-      </h4>
+      <div className="flex items-start gap-4 mb-3">
+        <div className="w-10 h-10 bg-[#016936]/20 flex items-center justify-center flex-shrink-0">
+          <Lightbulb className="w-5 h-5 text-[#2a9d5c]" strokeWidth={1.5} />
+        </div>
+        <h4 className="text-[16px] font-medium text-white pt-2">
+          {title}
+        </h4>
+      </div>
       <p
         className="text-[15px] text-white/60 leading-relaxed [&_strong]:text-[#2a9d5c] [&_strong]:font-medium"
         dangerouslySetInnerHTML={{ __html: description }}
@@ -185,17 +178,17 @@ export function RankingSection({
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-16">
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-8 lg:gap-16">
           {/* Left Column - Table */}
           <div ref={tableRef} className="relative">
-            <div className="lg:absolute lg:inset-0 border border-white/[0.06] overflow-y-scroll scrollbar-visible" data-lenis-prevent>
+            <div className="lg:absolute lg:inset-0 border border-white/[0.06] max-h-[60vh] lg:max-h-none overflow-auto table-scroll-container" data-lenis-prevent>
               <Table>
                 <TableHeader className="sticky top-0 bg-[#11191C] z-10">
                   <TableRow className="border-white/[0.06] hover:bg-transparent">
-                    <TableHead className="text-white/40 text-[13px] font-medium uppercase tracking-wider py-4 pl-6">
+                    <TableHead className="text-white/40 text-[11px] md:text-[13px] font-medium uppercase tracking-wider py-3 md:py-4 pl-3 md:pl-6 sticky left-0 bg-[#11191C] z-20">
                       {columnHeaders.name}
                     </TableHead>
-                    <TableHead className="text-white/40 text-[13px] font-medium uppercase tracking-wider py-4 pr-6 text-right">
+                    <TableHead className="text-white/40 text-[11px] md:text-[13px] font-medium uppercase tracking-wider py-3 md:py-4 pr-3 md:pr-6 text-right min-w-[180px] md:min-w-[220px]">
                       {columnHeaders.value}
                     </TableHead>
                   </TableRow>
@@ -206,26 +199,26 @@ export function RankingSection({
                       key={index}
                       className="border-white/[0.06] hover:bg-[#016936]/[0.08] transition-colors duration-300"
                     >
-                      <TableCell className="py-4 pl-6">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[12px] font-medium text-[#2a9d5c] bg-[#0d3d2a] px-2 py-0.5 flex-shrink-0">
+                      <TableCell className="py-3 md:py-4 pl-3 md:pl-6 sticky left-0 bg-[#11191C] z-10">
+                        <div className="flex items-center gap-2 md:gap-3">
+                          <span className="text-[10px] md:text-[12px] font-medium text-[#2a9d5c] bg-[#0d3d2a] px-1.5 md:px-2 py-0.5 flex-shrink-0">
                             #{index + 1}
                           </span>
-                          <span className="text-white/70 text-[15px]">
+                          <span className="text-white/70 text-[13px] md:text-[15px]">
                             {item.name}
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="py-4 pr-6">
-                        <div className="flex items-center gap-3">
-                          <div className="flex-1 h-2 bg-white/[0.06] rounded-full overflow-hidden">
+                      <TableCell className="py-3 md:py-4 pr-3 md:pr-6">
+                        <div className="flex items-center gap-2 md:gap-3">
+                          <div className="flex-1 h-1.5 md:h-2 bg-white/[0.06] rounded-full overflow-hidden min-w-[60px]">
                             <div
                               ref={el => { barsRef.current[index] = el }}
                               className="h-full bg-gradient-to-r from-[#016936] to-[#2a9d5c] rounded-full"
                               style={{ width: '0%' }}
                             />
                           </div>
-                          <span className="text-[14px] text-white/70 font-medium tabular-nums w-20 text-right">
+                          <span className="text-[12px] md:text-[14px] text-white/70 font-medium tabular-nums w-14 md:w-20 text-right flex-shrink-0">
                             {formatNumber(item.value)}
                           </span>
                         </div>

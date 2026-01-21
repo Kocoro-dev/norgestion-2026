@@ -163,6 +163,34 @@
   .scrollbar-visible::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.3);
   }
+
+  /* Table scroll container with indicators */
+  .table-scroll-container {
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-scroll-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .table-scroll-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .table-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+
+  .table-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .table-scroll-container::-webkit-scrollbar-corner {
+    background: transparent;
+  }
 }
 
 /* PDF Generation Mode Styles */
@@ -182,4 +210,64 @@ body.pdf-generating .slider-progress {
 /* Ensure sections have proper backgrounds for PDF capture */
 body.pdf-generating [id^="pdf-section-"] {
   page-break-inside: avoid;
+}
+
+/* Compact sections for PDF */
+body.pdf-generating #impacto {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+}
+
+body.pdf-generating #impacto .mb-20,
+body.pdf-generating #impacto .mb-28 {
+  margin-bottom: 2rem !important;
+}
+
+body.pdf-generating #impacto .category-card {
+  margin-bottom: 0 !important;
+}
+
+body.pdf-generating #impacto .text-\[72px\],
+body.pdf-generating #impacto .text-\[96px\] {
+  font-size: 56px !important;
+}
+
+/* Compact Competitive section */
+body.pdf-generating #competitivo {
+  padding-top: 3rem !important;
+  padding-bottom: 400px !important; /* Extra padding to fill page with dark background */
+}
+
+body.pdf-generating #competitivo .mb-16,
+body.pdf-generating #competitivo .mb-20 {
+  margin-bottom: 1.5rem !important;
+}
+
+body.pdf-generating #competitivo .p-8,
+body.pdf-generating #competitivo .p-12 {
+  padding: 1.5rem !important;
+}
+
+body.pdf-generating #competitivo .mb-10 {
+  margin-bottom: 1rem !important;
+}
+
+body.pdf-generating #competitivo .gap-6,
+body.pdf-generating #competitivo .gap-8 {
+  gap: 1rem !important;
+}
+
+/* Prevent insight cards from breaking */
+body.pdf-generating .insight-card {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Compact RankingSection insights */
+body.pdf-generating .insight-card .p-6 {
+  padding: 1rem !important;
+}
+
+body.pdf-generating .insight-card .mb-3 {
+  margin-bottom: 0.5rem !important;
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { toast } from 'sonner'
 import Image from 'next/image'
 import { gsap } from 'gsap'
@@ -70,7 +71,14 @@ function Lightbox({
   onPrev: () => void
   onGoToSlide: (index: number) => void
 }) {
-  // Handle keyboard navigation
+  const [mounted, setMounted] = useState(false)
+
+  // Ensure we're on client side for portal
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Handle keyboard navigation and body scroll lock
   useEffect(() => {
     if (!isOpen) return
 
@@ -89,20 +97,22 @@ function Lightbox({
     }
   }, [isOpen, onClose, onNext, onPrev])
 
-  if (!isOpen) return null
+  if (!isOpen || !mounted) return null
 
-  return (
+  const lightboxContent = (
     <div
-      className="fixed inset-0 z-[1001] flex items-center justify-center"
+      className="fixed inset-0 flex items-center justify-center"
+      style={{ zIndex: 99999 }}
       onClick={onClose}
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/95 backdrop-blur-sm" />
+      {/* Backdrop - Fully opaque */}
+      <div className="absolute inset-0 bg-black" />
 
-      {/* Close Button - Fixed position for visibility */}
+      {/* Close Button */}
       <button
         onClick={(e) => { e.stopPropagation(); onClose(); }}
-        className="fixed top-6 right-6 z-[1002] w-12 h-12 flex items-center justify-center bg-black/80 backdrop-blur-sm border border-white/30 text-white hover:bg-black hover:border-white/50 transition-all duration-300 rounded-full"
+        className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center bg-white/10 border border-white/30 text-white hover:bg-white/20 hover:border-white/50 transition-all duration-300 rounded-full"
+        style={{ zIndex: 100000 }}
         aria-label="Close lightbox"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -196,13 +206,19 @@ function Lightbox({
       </div>
     </div>
   )
+
+  // Use portal to render lightbox at document body level
+  return createPortal(lightboxContent, document.body)
 }
 
-// Stacked Images Component for PDF mode
+// Grid Images Component for PDF mode - shows max 4 images in 2x2 grid
 function StackedImages({ images }: { images: SliderImage[] }) {
+  // Only show first 4 images in PDF mode
+  const displayImages = images.slice(0, 4)
+
   return (
-    <div className="space-y-4">
-      {images.map((image, index) => (
+    <div className="grid grid-cols-2 gap-3">
+      {displayImages.map((image, index) => (
         <div
           key={index}
           className="relative aspect-[16/10] overflow-hidden bg-[#0a0f11] rounded-sm"
@@ -393,12 +409,12 @@ function KeywordCard({ term, position }: { term: string; position: number }) {
   return (
     <button
       onClick={copyToClipboard}
-      className="group text-left p-6 bg-[#11191C] hover:bg-[#016936]/[0.12] transition-all duration-300 cursor-pointer flex flex-col items-start"
+      className="group text-left p-4 md:p-6 bg-[#11191C] hover:bg-[#016936]/[0.12] transition-all duration-300 cursor-pointer flex flex-col items-start"
     >
-      <span className="inline-flex items-center justify-center text-[12px] font-medium text-[#2a9d5c] bg-[#0d3d2a] px-2.5 py-1.5 mb-4">
+      <span className="inline-flex items-center justify-center text-[10px] md:text-[12px] font-medium text-[#2a9d5c] bg-[#0d3d2a] px-2 md:px-2.5 py-1 md:py-1.5 mb-2 md:mb-4">
         #{position}
       </span>
-      <span className="text-[15px] text-white/75 leading-relaxed group-hover:text-white/90 transition-colors">
+      <span className="text-[13px] md:text-[15px] text-white/75 leading-relaxed group-hover:text-white/90 transition-colors">
         {term}
       </span>
     </button>
@@ -414,12 +430,12 @@ function GeoKeywordItem({ term, position }: { term: string; position: number }) 
   return (
     <button
       onClick={copyToClipboard}
-      className="group/item flex items-start gap-3 w-full text-left py-2 px-2 -mx-2 rounded hover:bg-[#016936]/[0.12] transition-all duration-200 cursor-pointer"
+      className="group/item flex items-start gap-2 md:gap-3 w-full text-left py-1.5 md:py-2 px-1.5 md:px-2 -mx-1.5 md:-mx-2 rounded hover:bg-[#016936]/[0.12] transition-all duration-200 cursor-pointer"
     >
-      <span className="inline-flex items-center justify-center text-[11px] font-medium text-[#2a9d5c] bg-[#0d3d2a] px-1.5 py-0.5 flex-shrink-0">
+      <span className="inline-flex items-center justify-center text-[10px] md:text-[11px] font-medium text-[#2a9d5c] bg-[#0d3d2a] px-1 md:px-1.5 py-0.5 flex-shrink-0">
         #{position}
       </span>
-      <span className="text-[14px] text-white/70 group-hover/item:text-white/90 transition-colors">
+      <span className="text-[12px] md:text-[14px] text-white/70 group-hover/item:text-white/90 transition-colors">
         {term}
       </span>
     </button>
@@ -565,14 +581,14 @@ export function LeadershipSection({
         </div>
 
         {/* Keywords Generales */}
-        <div className="mb-24">
-          <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
+        <div className="mb-16 md:mb-24">
+          <h3 className="text-[20px] md:text-[26px] font-medium text-white mb-3">
             Keywords generales destacadas
           </h3>
-          <p className="text-[16px] text-white/50 mb-10">
+          <p className="text-[14px] md:text-[16px] text-white/50 mb-6 md:mb-10">
             Términos de alto valor comercial donde NORGESTION ocupa la primera posición.
           </p>
-          <div className="keyword-grid grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/[0.06]">
+          <div className="keyword-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-[1px] md:bg-white/[0.06]">
             {generalKeywords.map((keyword, index) => (
               <KeywordCard key={index} term={keyword.term} position={keyword.position} />
             ))}
@@ -580,14 +596,14 @@ export function LeadershipSection({
         </div>
 
         {/* Sector Tecnológico */}
-        <div className="mb-24">
-          <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
+        <div className="mb-16 md:mb-24">
+          <h3 className="text-[20px] md:text-[26px] font-medium text-white mb-3">
             Sector tecnológico / Software
           </h3>
-          <p className="text-[16px] text-white/50 mb-10">
+          <p className="text-[14px] md:text-[16px] text-white/50 mb-6 md:mb-10">
             Posicionamiento especializado en M&A del sector IT y software.
           </p>
-          <div className="keyword-grid grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/[0.06]">
+          <div className="keyword-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-[1px] md:bg-white/[0.06]">
             {techKeywords.map((keyword, index) => (
               <KeywordCard key={index} term={keyword.term} position={keyword.position} />
             ))}
@@ -595,17 +611,17 @@ export function LeadershipSection({
         </div>
 
         {/* Dominio Geográfico */}
-        <div className="mb-24">
-          <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
+        <div className="mb-16 md:mb-24">
+          <h3 className="text-[20px] md:text-[26px] font-medium text-white mb-3">
             Dominio geográfico
           </h3>
-          <p className="text-[16px] text-white/50 mb-10">
+          <p className="text-[14px] md:text-[16px] text-white/50 mb-6 md:mb-10">
             Liderazgo en búsquedas locales de las principales ciudades.
           </p>
-          <div className="keyword-grid grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/[0.06]">
+          <div className="keyword-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-[1px] md:bg-white/[0.06]">
             {geoKeywords.map((geo, index) => (
-              <div key={index} className="p-6 bg-[#11191C] flex flex-col items-start">
-                <h4 className="font-medium text-white mb-5 text-[16px]">{geo.city}</h4>
+              <div key={index} className="p-4 md:p-6 bg-[#11191C] flex flex-col items-start">
+                <h4 className="font-medium text-white mb-3 md:mb-5 text-[14px] md:text-[16px]">{geo.city}</h4>
                 <div className="space-y-1 w-full">
                   {geo.keywords.map((kw, kwIndex) => (
                     <GeoKeywordItem key={kwIndex} term={kw.term} position={kw.position} />
@@ -617,14 +633,14 @@ export function LeadershipSection({
         </div>
 
         {/* Posicionamiento Internacional */}
-        <div className="mb-24">
-          <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
+        <div className="mb-16 md:mb-24">
+          <h3 className="text-[20px] md:text-[26px] font-medium text-white mb-3">
             Posicionamiento internacional
           </h3>
-          <p className="text-[16px] text-white/50 mb-10">
+          <p className="text-[14px] md:text-[16px] text-white/50 mb-6 md:mb-10">
             Visibilidad en búsquedas en inglés para captar operaciones cross-border.
           </p>
-          <div className="keyword-grid grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-[1px] bg-white/[0.06]">
+          <div className="keyword-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1 md:gap-[1px] md:bg-white/[0.06]">
             {internationalKeywords.map((keyword, index) => (
               <KeywordCard key={index} term={keyword.term} position={keyword.position} />
             ))}
@@ -636,16 +652,16 @@ export function LeadershipSection({
           <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
             Todas las keywords en Top 5
           </h3>
-          <p className="text-[16px] text-white/50 mb-10">
+          <p className="text-[14px] md:text-[16px] text-white/50 mb-6 md:mb-10">
             Listado completo de términos donde NORGESTION aparece entre los 5 primeros resultados de Google.
           </p>
-          <div className="border border-white/[0.06] max-h-[500px] overflow-y-scroll scrollbar-visible" data-lenis-prevent>
+          <div className="border border-white/[0.06] max-h-[50vh] md:max-h-[500px] overflow-auto table-scroll-container" data-lenis-prevent>
             <Table>
               <TableHeader className="sticky top-0 bg-[#11191C] z-10">
                 <TableRow className="border-white/[0.06] hover:bg-transparent">
-                  <TableHead className="text-white/40 text-[13px] font-medium uppercase tracking-wider py-4 pl-6 w-16">#</TableHead>
-                  <TableHead className="text-white/40 text-[13px] font-medium uppercase tracking-wider py-4">Keyword</TableHead>
-                  <TableHead className="text-white/40 text-[13px] font-medium uppercase tracking-wider py-4 pr-6 text-right w-24">Posición</TableHead>
+                  <TableHead className="text-white/40 text-[11px] md:text-[13px] font-medium uppercase tracking-wider py-3 md:py-4 pl-3 md:pl-6 w-10 md:w-16 sticky left-0 bg-[#11191C] z-20">#</TableHead>
+                  <TableHead className="text-white/40 text-[11px] md:text-[13px] font-medium uppercase tracking-wider py-3 md:py-4 min-w-[200px]">Keyword</TableHead>
+                  <TableHead className="text-white/40 text-[11px] md:text-[13px] font-medium uppercase tracking-wider py-3 md:py-4 pr-3 md:pr-6 text-right w-16 md:w-24">Posición</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -658,10 +674,10 @@ export function LeadershipSection({
                       toast.success(`"${keyword.term}" copiado al portapapeles`)
                     }}
                   >
-                    <TableCell className="text-white/40 text-[14px] py-4 pl-6 tabular-nums">{index + 1}</TableCell>
-                    <TableCell className="text-white/70 text-[15px] py-4">{keyword.term}</TableCell>
-                    <TableCell className="py-4 pr-6 text-right">
-                      <span className="inline-flex items-center justify-center text-[11px] font-medium text-[#2a9d5c] bg-[#0d3d2a] px-2 py-0.5">#{keyword.position}</span>
+                    <TableCell className="text-white/40 text-[12px] md:text-[14px] py-3 md:py-4 pl-3 md:pl-6 tabular-nums sticky left-0 bg-[#11191C] z-10">{index + 1}</TableCell>
+                    <TableCell className="text-white/70 text-[13px] md:text-[15px] py-3 md:py-4">{keyword.term}</TableCell>
+                    <TableCell className="py-3 md:py-4 pr-3 md:pr-6 text-right">
+                      <span className="inline-flex items-center justify-center text-[10px] md:text-[11px] font-medium text-[#2a9d5c] bg-[#0d3d2a] px-1.5 md:px-2 py-0.5">#{keyword.position}</span>
                     </TableCell>
                   </TableRow>
                 ))}

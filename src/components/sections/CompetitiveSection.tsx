@@ -15,16 +15,16 @@ interface CompetitiveSectionProps {
 }
 
 const insightsData = [
-  { title: 'Estrategia de Verticalización (Caso Baker Tilly)', insight: 'Se detecta en competidores como Baker Tilly la creación de ecosistemas web satélites para competir en Tech M&A. Frente a la integración, optan por segregar tráfico, posiblemente por limitaciones de agilidad corporativa. A su vez, se observa un mimetismo en su estrategia de LinkedIn (Quotes), validando nuestra línea editorial.' },
-  { title: 'Penalización Técnica (Caso Albia)', insight: 'Competidores como Albia han desplegado páginas sectoriales con intención SEO. Sin embargo, su pérdida de visibilidad sugiere una penalización por Experiencia de Usuario (Core Web Vitals). La relevancia semántica no sostiene el ranking si la estructura técnica falla.' },
-  { title: 'Inercia Estructural (Big Four / Banca)', insight: 'Actores tradicionales (Big Four) muestran dificultades de adaptación. A pesar de su inmensa autoridad de marca offline y actualizaciones de contenido, su rigidez estructural limita su reacción en los resultados de búsqueda, cediendo terreno en términos transaccionales.' },
+  { title: 'Estrategia de verticalización (caso Baker Tilly)', insight: 'Se detecta en competidores como Baker Tilly la creación de ecosistemas web satélites para competir en Tech M&A. Frente a la integración, optan por segregar tráfico, posiblemente por limitaciones de agilidad corporativa. A su vez, se observa un mimetismo en su estrategia de LinkedIn (Quotes), validando nuestra línea editorial.' },
+  { title: 'Penalización técnica (caso Albia)', insight: 'Competidores como Albia han desplegado páginas sectoriales con intención SEO. Sin embargo, su pérdida de visibilidad sugiere una penalización por Experiencia de Usuario (Core Web Vitals). La relevancia semántica no sostiene el ranking si la estructura técnica falla.' },
+  { title: 'Inercia estructural (Big Four / Banca)', insight: 'Actores tradicionales (Big Four) muestran dificultades de adaptación. A pesar de su inmensa autoridad de marca offline y actualizaciones de contenido, su rigidez estructural limita su reacción en los resultados de búsqueda, cediendo terreno en términos transaccionales.' },
 ]
 
 const strengthsData = [
   { title: 'Autoridad de dominio consolidada', description: 'La trayectoria de NORGESTION a lo largo de los años con una presencia digital de marca sistemática y cuidada le otorga una autoridad que se refleja, por ejemplo, en la capacidad de posicionar páginas de tercer nivel (ej: M&A Software) por encima de portales verticales exclusivos de la competencia.' },
-  { title: 'Arquitectura WEB estructural y semántica', description: 'Ventaja de origen. Mientras los competidores enfrentan la necesidad de una reestructuración integral de su arquitectura para optimizar su posicionamiento, NORGESTION opera sobre una base semántica sólida, diseñada desde el inicio para escalar el crecimiento sin deuda técnica ni fricción estructural. La interconexión estratégica entre las páginas de servicio (transaccionales) y el contenido profundo del Blog (informacionales) crea una red semántica que multiplica la relevancia y sostiene el crecimiento orgánico.' },
-  { title: 'Agilidad Full Stack', description: 'El control total del ciclo (Estrategia, Diseño, Código, Contenido) por parte del equipo NORGESTION + kingseo elimina la fricción entre proveedores y departamentos, permitiendo una aplicación ágil de la estrategia y adaptación a las necesidades.' },
-  { title: 'Visión Largoplacista', description: 'Construcción de activos digitales basada en calidad técnica (Compound Effect), premiando la calidad frente a la cantidad y evitando tácticas de Quick-Win que penalizan a largo plazo. La solidez actual es fruto de la acumulación de acciones coherentes.' },
+  { title: 'Arquitectura web estructural y semántica', description: 'Ventaja de origen. Mientras los competidores enfrentan la necesidad de una reestructuración integral de su arquitectura para optimizar su posicionamiento, NORGESTION opera sobre una base semántica sólida, diseñada desde el inicio para escalar el crecimiento sin deuda técnica ni fricción estructural. La interconexión estratégica entre las páginas de servicio (transaccionales) y el contenido profundo del Blog (informacionales) crea una red semántica que multiplica la relevancia y sostiene el crecimiento orgánico.' },
+  { title: 'Agilidad full stack', description: 'El control total del ciclo (Estrategia, Diseño, Código, Contenido) por parte del equipo NORGESTION + kingseo elimina la fricción entre proveedores y departamentos, permitiendo una aplicación ágil de la estrategia y adaptación a las necesidades.' },
+  { title: 'Visión largoplacista', description: 'Construcción de activos digitales basada en calidad técnica (Compound Effect), premiando la calidad frente a la cantidad y evitando tácticas de Quick-Win que penalizan a largo plazo. La solidez actual es fruto de la acumulación de acciones coherentes.' },
 ]
 
 export function CompetitiveSection({
@@ -158,42 +158,40 @@ export function CompetitiveSection({
               Ventaja competitiva: el modelo unificado
             </h3>
 
-            <div className="grid md:grid-cols-2 gap-10 md:gap-16">
-              <div>
-                <p className="text-[16px] md:text-[17px] text-white/70 leading-relaxed">
-                  Frente a la fragmentación (microsites externos) y la deuda técnica de la competencia, NORGESTION opera bajo un modelo centralizado que integra estrategia, tecnología y narrativa.
-                </p>
-              </div>
+            <div className="mb-10">
+              <p className="text-[16px] md:text-[17px] text-white/70 leading-relaxed max-w-[800px]">
+                Frente a la fragmentación (microsites externos) y la deuda técnica de la competencia, NORGESTION opera bajo un modelo centralizado que integra estrategia, tecnología y narrativa.
+              </p>
+            </div>
 
-              <div className="space-y-6">
-                {strengthsData.map((item, index) => (
-                  <div key={index} className="strength-item flex gap-4">
-                    <div className="flex-shrink-0 mt-0.5">
-                      <svg
-                        className="w-5 h-5 text-emerald-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2.5}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+              {strengthsData.map((item, index) => (
+                <div key={index} className="strength-item flex gap-4">
+                  <div className="flex-shrink-0 mt-0.5">
+                    <svg
+                      className="w-5 h-5 text-emerald-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2.5}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-[15px] font-medium text-white mb-1">
+                      {item.title}
                     </div>
-                    <div>
-                      <div className="text-[15px] font-medium text-white mb-1">
-                        {item.title}
-                      </div>
-                      <div className="text-[14px] text-white/50 leading-relaxed">
-                        {item.description}
-                      </div>
+                    <div className="text-[14px] text-white/50 leading-relaxed">
+                      {item.description}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
