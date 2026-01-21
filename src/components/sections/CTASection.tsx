@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { generateVisualPDF, generateEditorialPDF } from '@/lib/pdf-generator'
+import { generateVisualPDF, generateEditorialPDF, generatePropuestaEditorialPDF } from '@/lib/pdf-generator'
 
 interface CTASectionProps {
   title: string
@@ -14,6 +14,8 @@ interface CTASectionProps {
   mode?: 'link' | 'pdf'
   pdfTargetId?: string
   pdfFilename?: string
+  pdfTextFilename?: string
+  pdfType?: 'informe' | 'propuesta'
 }
 
 export function CTASection({
@@ -25,6 +27,8 @@ export function CTASection({
   mode = 'link',
   pdfTargetId = 'pdf-content',
   pdfFilename = 'NORGESTION-Informe-2025.pdf',
+  pdfTextFilename = 'NORGESTION-Informe-Texto-2025.pdf',
+  pdfType = 'informe',
 }: CTASectionProps) {
   const [isGeneratingVisual, setIsGeneratingVisual] = useState(false)
   const [isGeneratingText, setIsGeneratingText] = useState(false)
@@ -57,10 +61,17 @@ export function CTASection({
     setProgressText(0)
 
     try {
-      await generateEditorialPDF({
-        filename: 'NORGESTION-Informe-Texto-2025.pdf',
-        onProgress: setProgressText,
-      })
+      if (pdfType === 'propuesta') {
+        await generatePropuestaEditorialPDF({
+          filename: pdfTextFilename,
+          onProgress: setProgressText,
+        })
+      } else {
+        await generateEditorialPDF({
+          filename: pdfTextFilename,
+          onProgress: setProgressText,
+        })
+      }
     } catch (error) {
       console.error('Error generating text PDF:', error)
     } finally {

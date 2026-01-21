@@ -436,5 +436,298 @@ export async function generateEditorialPDF(
   onProgress?.(100)
 }
 
+/**
+ * Generate an editorial text-based PDF with the proposal content
+ */
+export async function generatePropuestaEditorialPDF(
+  options: PDFGeneratorOptions = {}
+): Promise<void> {
+  const { filename = 'NORGESTION-Propuesta-2026.pdf', onProgress } = options
+
+  onProgress?.(10)
+
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+  })
+
+  const pageWidth = 210
+  const pageHeight = 297
+  const margin = 20
+  const contentWidth = pageWidth - margin * 2
+  let y = margin
+
+  // Helper functions
+  const addPage = () => {
+    pdf.addPage()
+    y = margin
+  }
+
+  const checkPageBreak = (neededHeight: number) => {
+    if (y + neededHeight > pageHeight - margin) {
+      addPage()
+    }
+  }
+
+  const setFont = (style: 'title' | 'h1' | 'h2' | 'h3' | 'body' | 'small' | 'label') => {
+    switch (style) {
+      case 'title':
+        pdf.setFont('helvetica', 'bold')
+        pdf.setFontSize(28)
+        pdf.setTextColor(29, 29, 31)
+        break
+      case 'h1':
+        pdf.setFont('helvetica', 'bold')
+        pdf.setFontSize(22)
+        pdf.setTextColor(29, 29, 31)
+        break
+      case 'h2':
+        pdf.setFont('helvetica', 'bold')
+        pdf.setFontSize(16)
+        pdf.setTextColor(29, 29, 31)
+        break
+      case 'h3':
+        pdf.setFont('helvetica', 'bold')
+        pdf.setFontSize(13)
+        pdf.setTextColor(29, 29, 31)
+        break
+      case 'body':
+        pdf.setFont('helvetica', 'normal')
+        pdf.setFontSize(11)
+        pdf.setTextColor(80, 80, 80)
+        break
+      case 'small':
+        pdf.setFont('helvetica', 'normal')
+        pdf.setFontSize(9)
+        pdf.setTextColor(120, 120, 120)
+        break
+      case 'label':
+        pdf.setFont('helvetica', 'normal')
+        pdf.setFontSize(10)
+        pdf.setTextColor(1, 105, 54)
+        break
+    }
+  }
+
+  const addText = (text: string, style: 'title' | 'h1' | 'h2' | 'h3' | 'body' | 'small' | 'label', lineHeight: number = 7) => {
+    setFont(style)
+    const lines = pdf.splitTextToSize(text, contentWidth)
+    const totalHeight = lines.length * lineHeight
+    checkPageBreak(totalHeight)
+    pdf.text(lines, margin, y)
+    y += totalHeight
+  }
+
+  const addSpacer = (height: number) => {
+    y += height
+  }
+
+  const addHorizontalLine = () => {
+    checkPageBreak(10)
+    pdf.setDrawColor(220, 220, 220)
+    pdf.setLineWidth(0.3)
+    pdf.line(margin, y, pageWidth - margin, y)
+    y += 8
+  }
+
+  // ============================================
+  // COVER PAGE
+  // ============================================
+
+  // Logo area
+  pdf.setFillColor(1, 105, 54)
+  pdf.rect(margin, y, 8, 8, 'F')
+  y += 20
+
+  addText('NORGESTION', 'label')
+  addSpacer(5)
+
+  addText('Consolidación y', 'title')
+  addText('Expansión', 'title')
+  addText('2026', 'title')
+  addSpacer(10)
+
+  addText('Propuesta estratégica para mantener el liderazgo digital y expandir el alcance a nuevos mercados y verticales.', 'body', 6)
+
+  addSpacer(20)
+  addHorizontalLine()
+
+  onProgress?.(30)
+
+  // ============================================
+  // PAGE 2: STRATEGY
+  // ============================================
+  addPage()
+
+  addText('Estrategia', 'label')
+  addSpacer(5)
+  addText('Líneas de trabajo 2026', 'h1')
+  addSpacer(5)
+  addText('Cuatro ejes estratégicos para consolidar el liderazgo y expandir el alcance.', 'body', 6)
+  addSpacer(15)
+
+  const strategies = [
+    {
+      number: '01',
+      title: 'Verticales sectoriales',
+      description: 'Posicionarse como experto en sectores específicos de alto valor.',
+      sectors: ['Energía: Renovables, oil&gas, utilities', 'Industria: Manufactureras, automoción', 'Agroalimentario: Bodegas, cooperativas', 'Audiovisual: Productoras, contenido digital'],
+      objective: 'Captar operaciones de clientes que buscan asesores especializados en su sector.',
+    },
+    {
+      number: '02',
+      title: 'Blindaje geográfico',
+      description: 'Dominar las búsquedas locales en mercados estratégicos.',
+      sectors: ['M&A Valencia', 'Corporate Finance Sevilla', 'Venta empresa País Vasco', 'Reestructuración Galicia'],
+      objective: 'Ser la primera opción cuando un empresario busca asesoramiento en su ciudad.',
+    },
+    {
+      number: '03',
+      title: 'Expansión internacional',
+      description: 'Captar operaciones cross-border e inversores extranjeros.',
+      sectors: ['M&A advisor Spain', 'Sell company Spain', 'Spanish market entry', 'Tech M&A Spain'],
+      objective: 'Posicionar a NORGESTION como puerta de entrada al mercado español.',
+    },
+    {
+      number: '04',
+      title: 'Autoridad y reputación',
+      description: 'Reforzar la credibilidad offline que impulsa el posicionamiento online.',
+      sectors: ['Presencia en medios especializados', 'Artículos de opinión en publicaciones del sector', 'Menciones en rankings y directorios', 'Participación en eventos del sector'],
+      objective: 'Que las menciones externas refuercen la autoridad web.',
+    },
+  ]
+
+  strategies.forEach((strategy) => {
+    checkPageBreak(60)
+    setFont('label')
+    pdf.text(strategy.number, margin, y)
+    setFont('h2')
+    pdf.text(strategy.title, margin + 12, y)
+    y += 8
+
+    setFont('body')
+    const descLines = pdf.splitTextToSize(strategy.description, contentWidth - 12)
+    pdf.text(descLines, margin, y)
+    y += descLines.length * 5 + 5
+
+    strategy.sectors.forEach((sector) => {
+      addText('• ' + sector, 'body', 5)
+    })
+
+    addSpacer(5)
+    setFont('small')
+    pdf.text('Objetivo: ' + strategy.objective, margin, y)
+    y += 10
+    addSpacer(5)
+  })
+
+  onProgress?.(50)
+
+  // ============================================
+  // PAGE 3: ROADMAP
+  // ============================================
+  addPage()
+
+  addText('Hoja de Ruta', 'label')
+  addSpacer(5)
+  addText('Calendario de ejecución', 'h1')
+  addSpacer(5)
+  addText('Distribución del trabajo a lo largo del año.', 'body', 6)
+  addSpacer(15)
+
+  const quarters = [
+    {
+      label: 'Q1 — Enero - Marzo',
+      items: ['Auditoría de posiciones actuales', 'Definición de verticales prioritarias', 'Estructura de landings sectoriales', 'Inicio vertical Energía'],
+    },
+    {
+      label: 'Q2 — Abril - Junio',
+      items: ['Lanzamiento vertical Industria', 'Blindaje geográfico: Valencia, Sevilla', 'Optimización de posiciones existentes', 'Campaña de autoridad en medios'],
+    },
+    {
+      label: 'Q3 — Julio - Septiembre',
+      items: ['Vertical Agroalimentario', 'Estructura internacional (inglés)', 'Blindaje geográfico: Galicia, Aragón', 'Análisis de competencia'],
+    },
+    {
+      label: 'Q4 — Octubre - Diciembre',
+      items: ['Vertical Audiovisual', 'Consolidación internacional', 'Optimización general', 'Informe anual y planificación 2027'],
+    },
+  ]
+
+  quarters.forEach((quarter) => {
+    checkPageBreak(40)
+    addText(quarter.label, 'h2')
+    addSpacer(5)
+    quarter.items.forEach((item) => {
+      addText('• ' + item, 'body', 5)
+    })
+    addSpacer(10)
+  })
+
+  onProgress?.(70)
+
+  // ============================================
+  // PAGE 4: PRICING
+  // ============================================
+  addPage()
+
+  addText('Inversión', 'label')
+  addSpacer(5)
+  addText('Propuesta económica', 'h1')
+  addSpacer(5)
+  addText('Cuota integral que incluye todos los servicios necesarios para ejecutar la estrategia.', 'body', 6)
+  addSpacer(15)
+
+  addText('Servicios incluidos', 'h2')
+  addSpacer(8)
+
+  const services = [
+    { title: 'Dirección estratégica', desc: 'Reuniones periódicas, análisis de competencia, ajuste de prioridades según objetivos de negocio.' },
+    { title: 'Diseño y desarrollo web', desc: 'Nuevas páginas, mejoras de experiencia de usuario, adaptación continua a dispositivos.' },
+    { title: 'Posicionamiento SEO', desc: 'Optimización técnica, creación de contenido estratégico, mejora continua de posiciones.' },
+    { title: 'Gestión LinkedIn', desc: 'Publicaciones para perfil corporativo y socios, interacción, crecimiento de audiencia.' },
+    { title: 'Estrategia internacional', desc: 'Contenido en inglés, optimización para mercados extranjeros, captación internacional.' },
+    { title: 'Soporte tecnológico', desc: 'Mantenimiento, seguridad, implementación de nuevas funcionalidades.' },
+  ]
+
+  services.forEach((service) => {
+    checkPageBreak(20)
+    addText(service.title, 'h3')
+    addText(service.desc, 'body', 5)
+    addSpacer(8)
+  })
+
+  addSpacer(10)
+  addHorizontalLine()
+
+  addText('Notas adicionales', 'h2')
+  addSpacer(8)
+
+  const notes = [
+    { title: 'ROI estimado', desc: 'Con un fee medio de operación de [X]€, la inversión anual se recupera con [X] operaciones originadas digitalmente.' },
+    { title: 'Comparativa', desc: 'La alternativa sería contratar una agencia externa (sin conocimiento del sector) o un equipo interno (mayor coste fijo).' },
+    { title: 'Compromiso', desc: 'Facturación mensual. Revisión trimestral de resultados y ajuste de prioridades.' },
+  ]
+
+  notes.forEach((note) => {
+    checkPageBreak(20)
+    addText(note.title, 'h3')
+    addText(note.desc, 'body', 5)
+    addSpacer(8)
+  })
+
+  // Footer
+  addSpacer(20)
+  setFont('small')
+  pdf.text('NORGESTION © 2026 - Propuesta Estratégica', margin, pageHeight - 15)
+
+  onProgress?.(95)
+
+  pdf.save(filename)
+
+  onProgress?.(100)
+}
+
 // Legacy export for backwards compatibility
 export const generatePDF = generateVisualPDF

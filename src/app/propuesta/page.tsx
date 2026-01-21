@@ -20,7 +20,7 @@ export default function PropuestaPage() {
     <>
       <Navbar items={navItems} />
 
-      <main>
+      <main id="pdf-content">
         <HeroSection
           badge="Propuesta Estratégica"
           title={<>Consolidación y<br /><em>Expansión</em><br />2026</>}
@@ -213,6 +213,19 @@ export default function PropuestaPage() {
           ]}
           ctaText="Aprobar Propuesta"
           ctaHref="#contacto"
+        />
+
+        {/* CTA - PDF Download */}
+        <CTASection
+          title="Descargar propuesta"
+          description="Genera un PDF con el contenido de esta propuesta."
+          buttonText="Descargar PDF Visual"
+          mode="pdf"
+          pdfTargetId="pdf-content"
+          pdfFilename="NORGESTION-Propuesta-2026.pdf"
+          pdfTextFilename="NORGESTION-Propuesta-Texto-2026.pdf"
+          pdfType="propuesta"
+          variant="light"
         />
 
         <CTASection
