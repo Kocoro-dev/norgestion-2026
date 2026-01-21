@@ -70,7 +70,7 @@ export function HeroSection({
           {hasExecutiveSummary && (
             <div className="bg-[#f5f5f7] p-8 border-t-[3px] border-[#016936]">
               <h2 className="text-[20px] font-semibold text-[#1d1d1f] mb-8">
-                Resumen Ejecutivo
+                Resumen ejecutivo
               </h2>
 
               <div className="space-y-6">

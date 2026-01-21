@@ -143,7 +143,7 @@ function InsightItem({
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
     >
-      <h4 className="text-[15px] font-semibold text-[#1d1d1f] mb-2">
+      <h4 className="text-[15px] font-medium text-[#1d1d1f] mb-2">
         {title}
       </h4>
       <p className="text-[15px] text-[#6e6e73] leading-relaxed">
@@ -217,17 +217,17 @@ export function ImpactSection({
         <div className="pt-12 border-t border-[#d2d2d7]/60">
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             <InsightItem
-              title="Cambio de Tendencia"
+              title="Cambio de tendencia"
               description="Inversión de la polaridad del tráfico. Por primera vez, el volumen de consultas con intención comercial supera al flujo de candidatos y talento, validando la web como herramienta de soporte a la originación."
               delay={0}
             />
             <InsightItem
-              title="Tracción Vertical"
+              title="Tracción vertical"
               description="Validación de especialización. La vertical de M&A Software ha generado contactos específicos del sector, demostrando que el contenido de nicho atrae a una contraparte cualificada."
               delay={100}
             />
             <InsightItem
-              title="Alcance Cross-Border"
+              title="Alcance cross-border"
               description="Originación Internacional. Se registran entradas de contacto procedentes de mercados exteriores, correlacionando con el aumento de tráfico internacional observado en la analítica web."
               delay={200}
             />

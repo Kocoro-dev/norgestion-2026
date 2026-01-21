@@ -75,15 +75,15 @@ export interface Insight {
 
 export const pageRankingInsights: Insight[] = [
   {
-    title: 'Tracción Internacional',
+    title: 'Tracción internacional',
     description: 'La versión en inglés (/en) ocupa la <strong>4ª posición global</strong> en visitas, superando a la mayoría de páginas de servicios locales. El tráfico multilingüe es un vector de crecimiento.',
   },
   {
-    title: 'Jerarquía de Interés',
+    title: 'Jerarquía de interés',
     description: 'Las áreas de <strong>Corporate Finance</strong> y <strong>Nuestra Firma</strong> lideran el interés tras la Home. Les siguen Jurídico Fiscal e Interim Management y la página de M&A, validando el cross-selling de servicios.',
   },
   {
-    title: 'Marca Personal y Liderazgo',
+    title: 'Marca personal y liderazgo',
     description: 'Existe una correlación directa entre la jerarquía corporativa y el interés de la audiencia. Los perfiles del Equipo Directivo (Socios y Presidente) acumulan el mayor volumen de tráfico en la sección de equipo, validando la relevancia de la marca personal en la generación de confianza.',
   },
 ]
@@ -95,11 +95,11 @@ export const visibilityRankingInsights: Insight[] = [
     description: 'Aunque Interim Management lidera individualmente, las verticales de <strong>Corporate Finance</strong> y <strong>M&A</strong> combinadas dominan el volumen total de impresiones. El mercado identifica claramente a la firma con operaciones corporativas.',
   },
   {
-    title: 'Servicios Especializados vs. Home',
+    title: 'Servicios especializados vs. Home',
     description: 'Dato crítico: Las páginas de servicios técnicos (<strong>Reestructuraciones, M&A, Interim</strong>) superan en visibilidad orgánica a la propia Home. El usuario llega buscando soluciones específicas (\'Pain-point SEO\') antes que la marca genérica.',
   },
   {
-    title: 'El Activo Estratégico "Software"',
+    title: 'El activo estratégico "Software"',
     description: 'La página de sector M&A Software (versión Inglés) genera <strong>~5.200 impresiones</strong>, casi el 50% del volumen de la Home en español. Sumada a la versión española (<strong>~3.400</strong>), esta vertical se ha convertido en un activo crítico de entrada para captación internacional y posicionamiento sectorial.',
   },
 ]

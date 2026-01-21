@@ -35,7 +35,7 @@ export default function PropuestaPage() {
           strategies={[
             {
               number: '01',
-              title: 'Verticales Sectoriales',
+              title: 'Verticales sectoriales',
               description: 'Posicionarse como experto en sectores específicos de alto valor.',
               details: (
                 <VerticalList
@@ -63,7 +63,7 @@ export default function PropuestaPage() {
             },
             {
               number: '02',
-              title: 'Blindaje Geográfico',
+              title: 'Blindaje geográfico',
               description: 'Dominar las búsquedas locales en mercados estratégicos.',
               details: (
                 <StrategyList
@@ -80,7 +80,7 @@ export default function PropuestaPage() {
             },
             {
               number: '03',
-              title: 'Expansión Internacional',
+              title: 'Expansión internacional',
               description: 'Captar operaciones cross-border e inversores extranjeros.',
               details: (
                 <StrategyList
@@ -97,7 +97,7 @@ export default function PropuestaPage() {
             },
             {
               number: '04',
-              title: 'Autoridad y Reputación',
+              title: 'Autoridad y reputación',
               description: 'Reforzar la credibilidad offline que impulsa el posicionamiento online.',
               details: (
                 <StrategyList
@@ -173,11 +173,11 @@ export default function PropuestaPage() {
           }}
           features={[
             {
-              title: 'Dirección Estratégica',
+              title: 'Dirección estratégica',
               description: 'Reuniones periódicas, análisis de competencia, ajuste de prioridades según objetivos de negocio.',
             },
             {
-              title: 'Diseño y Desarrollo Web',
+              title: 'Diseño y desarrollo web',
               description: 'Nuevas páginas, mejoras de experiencia de usuario, adaptación continua a dispositivos.',
             },
             {
@@ -189,17 +189,17 @@ export default function PropuestaPage() {
               description: 'Publicaciones para perfil corporativo y socios, interacción, crecimiento de audiencia.',
             },
             {
-              title: 'Estrategia Internacional',
+              title: 'Estrategia internacional',
               description: 'Contenido en inglés, optimización para mercados extranjeros, captación internacional.',
             },
             {
-              title: 'Soporte Tecnológico',
+              title: 'Soporte tecnológico',
               description: 'Mantenimiento, seguridad, implementación de nuevas funcionalidades.',
             },
           ]}
           notes={[
             {
-              title: 'ROI Estimado',
+              title: 'ROI estimado',
               description: 'Con un fee medio de operación de [X]€, la inversión anual se recupera con [X] operaciones originadas digitalmente.',
             },
             {

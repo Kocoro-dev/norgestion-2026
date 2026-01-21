@@ -36,7 +36,7 @@ function formatNumber(num: number): string {
 function InsightCard({ title, description }: Insight) {
   return (
     <div className="bg-[#0d1214] border border-white/[0.06] p-6 hover:border-[#016936]/30 transition-all duration-300">
-      <h4 className="text-[16px] font-semibold text-white mb-3">
+      <h4 className="text-[16px] font-medium text-white mb-3">
         {title}
       </h4>
       <p
@@ -98,8 +98,8 @@ export function RankingSection({
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-16">
           {/* Left Column - Table */}
-          <div>
-            <div className="border border-white/[0.06] max-h-[500px] overflow-y-auto">
+          <div className="relative">
+            <div className="lg:absolute lg:inset-0 border border-white/[0.06] overflow-y-scroll scrollbar-visible">
               <Table>
                 <TableHeader className="sticky top-0 bg-[#11191C] z-10">
                   <TableRow className="border-white/[0.06] hover:bg-transparent">
@@ -140,7 +140,7 @@ export function RankingSection({
           {/* Right Column - Insights */}
           <div>
             <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-6">
-              Hallazgos Clave
+              Hallazgos clave
             </h3>
             <div className="space-y-4">
               {insights.map((insight, index) => (

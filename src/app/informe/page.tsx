@@ -49,17 +49,17 @@ export default function InformePage() {
           executiveSummary={[
             {
               number: '01',
-              title: 'Liderazgo Digital',
+              title: 'Liderazgo digital',
               description: 'Dominio en búsquedas de alto valor en Google y creciente presencia en resultados de IA generativa.',
             },
             {
               number: '02',
-              title: 'Validación de Originación',
+              title: 'Validación de originación',
               description: 'Aumento sostenido de contactos comerciales orgánicos generados a través del canal digital.',
             },
             {
               number: '03',
-              title: 'Proyección Internacional',
+              title: 'Proyección internacional',
               description: 'La web actúa como escaparate para inversores extranjeros interesados en el middle market español.',
             },
           ]}
@@ -94,7 +94,7 @@ export default function InformePage() {
         {/* Ranking por Página */}
         <RankingSection
           label="02.1 — Tráfico Real"
-          title="Ranking por Página: Interés del Usuario"
+          title="Ranking por página: Interés del usuario"
           subtitle="Las páginas más visitadas dentro del ecosistema digital de NORGESTION."
           variant="pages"
           data={pageRankings.map(p => ({ name: p.title, value: p.views }))}
@@ -105,7 +105,7 @@ export default function InformePage() {
         {/* Ranking de Visibilidad SEO */}
         <RankingSection
           label="02.2 — Visibilidad SEO"
-          title="Ranking de Visibilidad en Google"
+          title="Ranking de visibilidad en Google"
           subtitle="Páginas con mayor volumen de impresiones (visualizaciones) en los resultados de búsqueda de Google."
           variant="visibility"
           data={visibilityRankings.map(v => ({ name: v.page, value: v.impressions }))}
@@ -116,7 +116,7 @@ export default function InformePage() {
         {/* LinkedIn */}
         <LinkedInSection
           label="03 — LinkedIn Corporativo"
-          title="Ecosistema Social"
+          title="Ecosistema social"
           subtitle="Rendimiento del canal corporativo y validación de la estrategia de Thought Leadership."
           disclaimer="Datos obtenidos de LinkedIn Analytics. Representan métricas acumuladas del último trimestre."
         />
@@ -124,7 +124,7 @@ export default function InformePage() {
         {/* Impact */}
         <ImpactSection
           label="04 — Impacto en Negocio"
-          title="Activación de la Originación Digital"
+          title="Activación de la originación digital"
           subtitle="Evolución del canal web: de portal corporativo a fuente activa de contactos comerciales y captación de talento."
           disclaimer="Datos agregados del formulario de contacto web durante 2025. La categorización se realiza en base al contenido del mensaje recibido. La información se analiza respetando la privacidad de datos y con fines exclusivamente analíticos; ningún dato personal es almacenado por nosotros."
         />
@@ -132,13 +132,13 @@ export default function InformePage() {
         {/* Competitive Environment */}
         <CompetitiveSection
           label="05 — Entorno Competitivo"
-          title="Entorno Competitivo"
+          title="Entorno competitivo"
           subtitle="Análisis de la respuesta del mercado y evaluación de la ventaja estructural frente a competidores directos."
         />
 
         {/* CTA - PDF Download */}
         <CTASection
-          title="Descargar Informe"
+          title="Descargar informe"
           description="Genera un PDF con el contenido de este informe."
           buttonText="Descargar PDF Visual"
           mode="pdf"

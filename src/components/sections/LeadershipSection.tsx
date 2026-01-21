@@ -87,30 +87,27 @@ function Lightbox({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-[1001] flex items-center justify-center"
       onClick={onClose}
     >
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/95 backdrop-blur-sm" />
 
-      {/* Content */}
-      <div
-        className="relative w-full h-full flex items-center justify-center p-4 md:p-12"
-        onClick={(e) => e.stopPropagation()}
+      {/* Close Button - Fixed position for visibility */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        className="fixed top-6 right-6 z-[1002] w-12 h-12 flex items-center justify-center bg-black/80 backdrop-blur-sm border border-white/30 text-white hover:bg-black hover:border-white/50 transition-all duration-300 rounded-full"
+        aria-label="Close lightbox"
       >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-6 right-6 z-10 w-12 h-12 flex items-center justify-center bg-white/5 backdrop-blur-sm border border-white/10 text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 rounded-full"
-          aria-label="Close lightbox"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
 
+      {/* Content */}
+      <div className="relative w-full h-full flex items-center justify-center p-4 md:p-12">
         {/* Main Image */}
-        <div className="relative w-full h-full max-w-[90vw] max-h-[85vh]">
+        <div className="relative w-full h-full max-w-[90vw] max-h-[85vh]" onClick={(e) => e.stopPropagation()}>
           {images.map((image, index) => (
             <div
               key={index}
@@ -153,7 +150,7 @@ function Lightbox({
         </button>
 
         {/* Bottom Bar */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4" onClick={(e) => e.stopPropagation()}>
           {/* Image Counter */}
           <div className="text-[14px] font-medium text-white/50 tracking-wider">
             <span className="text-white">{String(currentIndex + 1).padStart(2, '0')}</span>
@@ -179,7 +176,7 @@ function Lightbox({
         </div>
 
         {/* Keyboard Hint */}
-        <div className="absolute bottom-6 right-6 hidden md:flex items-center gap-4 text-[12px] text-white/30">
+        <div className="absolute bottom-6 right-6 hidden md:flex items-center gap-4 text-[12px] text-white/30" onClick={(e) => e.stopPropagation()}>
           <span className="flex items-center gap-1.5">
             <kbd className="px-2 py-0.5 bg-white/10 rounded text-white/50">ESC</kbd>
             cerrar
@@ -374,6 +371,11 @@ const aiSliderImages: SliderImage[] = [
   { src: '/images/slider-ia/NORGESTION_01.jpg', alt: 'NORGESTION en resultados de IA - Búsqueda M&A' },
   { src: '/images/slider-ia/NORGESTION_02.jpg', alt: 'NORGESTION en resultados de IA - Consultora especializada' },
   { src: '/images/slider-ia/NORGESTION_04.jpg', alt: 'NORGESTION en resultados de IA - Interim Management' },
+  { src: '/images/slider-ia/NORGESTION_07.jpg', alt: 'NORGESTION en resultados de IA - Corporate Finance' },
+  { src: '/images/slider-ia/NORGESTION_08.jpg', alt: 'NORGESTION en resultados de IA - Asesoría empresarial' },
+  { src: '/images/slider-ia/NORGESTION_ChatGPT.jpg', alt: 'NORGESTION en ChatGPT' },
+  { src: '/images/slider-ia/NORGESTION_Claude_España.jpg', alt: 'NORGESTION en Claude - España' },
+  { src: '/images/slider-ia/NORGESTION_Claude_Madrid.jpg', alt: 'NORGESTION en Claude - Madrid' },
 ]
 
 function KeywordCard({ term, position }: { term: string; position: number }) {
@@ -466,7 +468,7 @@ export function LeadershipSection({
         {/* Keywords Generales */}
         <div className="mb-24">
           <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
-            Keywords Generales Destacadas
+            Keywords generales destacadas
           </h3>
           <p className="text-[16px] text-white/50 mb-10">
             Términos de alto valor comercial donde NORGESTION ocupa la primera posición.
@@ -481,7 +483,7 @@ export function LeadershipSection({
         {/* Sector Tecnológico */}
         <div className="mb-24">
           <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
-            Sector Tecnológico / Software
+            Sector tecnológico / Software
           </h3>
           <p className="text-[16px] text-white/50 mb-10">
             Posicionamiento especializado en M&A del sector IT y software.
@@ -496,7 +498,7 @@ export function LeadershipSection({
         {/* Dominio Geográfico */}
         <div className="mb-24">
           <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
-            Dominio Geográfico
+            Dominio geográfico
           </h3>
           <p className="text-[16px] text-white/50 mb-10">
             Liderazgo en búsquedas locales de las principales ciudades.
@@ -518,7 +520,7 @@ export function LeadershipSection({
         {/* Posicionamiento Internacional */}
         <div className="mb-24">
           <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
-            Posicionamiento Internacional
+            Posicionamiento internacional
           </h3>
           <p className="text-[16px] text-white/50 mb-10">
             Visibilidad en búsquedas en inglés para captar operaciones cross-border.
@@ -533,7 +535,7 @@ export function LeadershipSection({
         {/* All Keywords Table */}
         <div className="mb-24">
           <h3 className="text-[22px] md:text-[26px] font-medium text-white mb-3">
-            Todas las Keywords en Top 5
+            Todas las keywords en Top 5
           </h3>
           <p className="text-[16px] text-white/50 mb-10">
             Listado completo de términos donde NORGESTION aparece entre los 5 primeros resultados de Google.
@@ -585,7 +587,7 @@ export function LeadershipSection({
             <div>
               <h2 className="text-[32px] md:text-[48px] font-semibold text-white leading-tight mb-6">
                 Presencia en<br />
-                <span className="text-[#2a9d5c]">IA Generativa</span>
+                <span className="text-[#2a9d5c]">IA generativa</span>
               </h2>
               <p className="text-[20px] text-white/60 leading-relaxed mb-6">
                 NORGESTION aparece de forma destacada en los resultados de inteligencia artificial generativa, tanto en búsquedas de keywords transaccionales como en consultas específicas sobre asesores boutique y especialistas en middle market.

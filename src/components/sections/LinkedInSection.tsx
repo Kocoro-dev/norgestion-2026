@@ -181,7 +181,7 @@ function InsightCard({
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
       }`}
     >
-      <h4 className="text-[16px] font-semibold text-[#1d1d1f] mb-3">
+      <h4 className="text-[16px] font-medium text-[#1d1d1f] mb-3">
         {title}
       </h4>
       <p className="text-[15px] text-[#6e6e73] leading-relaxed">
@@ -256,21 +256,21 @@ export function LinkedInSection({
         {/* Insights Section */}
         <div className="mb-12">
           <h3 className="text-[22px] md:text-[26px] font-medium text-[#1d1d1f] mb-6">
-            Análisis Estratégico
+            Análisis estratégico
           </h3>
           <div className="grid md:grid-cols-3 gap-4">
             <InsightCard
-              title="Efectividad del Aumento de Frecuencia"
+              title="Efectividad del aumento de frecuencia"
               description="El incremento en la cadencia de publicación ha resultado en un crecimiento neto del alcance acumulado. Lejos de saturar, la suma de las publicaciones habituales más el nuevo contenido editorial ha mejorado el rendimiento medio por post."
               delay={0}
             />
             <InsightCard
-              title="Comportamiento por Formato"
+              title="Comportamiento por formato"
               description="Se observa una variación en la respuesta según el tipo de contenido. Las publicaciones visuales (Quotes) maximizan el Brand Awareness, mientras que el contenido técnico tracciona el clic, sugiriendo una segmentación algorítmica de la audiencia."
               delay={100}
             />
             <InsightCard
-              title="Correlación Web-Social"
+              title="Correlación web-social"
               description="La visibilidad de los socios en LinkedIn mantiene una coherencia con los patrones de navegación web, donde las páginas de perfil del equipo directivo figuran entre las más visitadas. El canal social actúa como catalizador de la marca personal."
               delay={200}
             />

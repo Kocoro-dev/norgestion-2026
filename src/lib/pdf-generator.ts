@@ -241,13 +241,13 @@ export async function generateEditorialPDF(
   addHorizontalLine()
 
   // Executive Summary
-  addText('Resumen Ejecutivo', 'h2')
+  addText('Resumen ejecutivo', 'h2')
   addSpacer(8)
 
   const summaryPoints = [
-    { num: '01', title: 'Liderazgo Digital', desc: 'Dominio en búsquedas de alto valor en Google y creciente presencia en resultados de IA generativa.' },
-    { num: '02', title: 'Validación de Originación', desc: 'Aumento sostenido de contactos comerciales orgánicos generados a través del canal digital.' },
-    { num: '03', title: 'Proyección Internacional', desc: 'La web actúa como escaparate para inversores extranjeros interesados en el middle market español.' },
+    { num: '01', title: 'Liderazgo digital', desc: 'Dominio en búsquedas de alto valor en Google y creciente presencia en resultados de IA generativa.' },
+    { num: '02', title: 'Validación de originación', desc: 'Aumento sostenido de contactos comerciales orgánicos generados a través del canal digital.' },
+    { num: '03', title: 'Proyección internacional', desc: 'La web actúa como escaparate para inversores extranjeros interesados en el middle market español.' },
   ]
 
   summaryPoints.forEach((point) => {
@@ -341,7 +341,7 @@ export async function generateEditorialPDF(
   pdf.text(kwLines, margin, y)
   y += kwLines.length * 5 + 10
 
-  addText('Presencia en IA Generativa', 'h2')
+  addText('Presencia en IA generativa', 'h2')
   addSpacer(5)
   addText('NORGESTION aparece de forma destacada en los resultados de inteligencia artificial generativa (ChatGPT, Perplexity, Claude), tanto en búsquedas transaccionales como en consultas específicas sobre asesores boutique y especialistas en middle market.', 'body', 6)
 

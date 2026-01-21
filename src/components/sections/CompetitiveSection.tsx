@@ -36,7 +36,7 @@ function InsightCard({
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
       }`}
     >
-      <h4 className="text-[15px] font-semibold text-white mb-4">
+      <h4 className="text-[15px] font-medium text-white mb-4">
         {title}
       </h4>
       <p className="text-[14px] text-white/60 leading-relaxed">
