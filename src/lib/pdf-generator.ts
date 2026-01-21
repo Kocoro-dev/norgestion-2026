@@ -550,9 +550,9 @@ export async function generatePropuestaEditorialPDF(
   addText('NORGESTION', 'label')
   addSpacer(5)
 
-  addText('Propuesta estratégica:', 'title')
-  addText('consolidación y expansión', 'title')
-  addText('2026', 'title')
+  addText('Propuesta estratégica:', 'title', 12)
+  addText('consolidación y expansión', 'title', 12)
+  addText('2026', 'title', 12)
   addSpacer(10)
 
   addText('Plan de trabajo para mantener el liderazgo actual y expandir el alcance hacia nuevos mercados, verticales, modelos de inteligencia (GEO) y reputación de marca.', 'body', 6)
